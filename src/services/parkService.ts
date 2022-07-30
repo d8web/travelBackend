@@ -20,6 +20,8 @@ export const insertPark = async (parkObject: ParkType, image: string) => {
             name: parkObject.name,
             image,
             price: parkObject.price,
+            phone: parkObject.phone,
+            whatsapp: parkObject.whatsapp,
             wifi: parkObject.wifi,
             bath: parkObject.bath,
             restaurant: parkObject.restaurant,

@@ -145,6 +145,8 @@ CREATE TABLE "parks" (
     "name" TEXT NOT NULL,
     "image" TEXT DEFAULT 'cover.jpg',
     "price" DOUBLE PRECISION NOT NULL,
+    "phone" TEXT,
+    "whatsapp" TEXT,
     "wifi" BOOLEAN NOT NULL,
     "bath" BOOLEAN NOT NULL,
     "restaurant" BOOLEAN NOT NULL,

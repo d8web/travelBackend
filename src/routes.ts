@@ -9,6 +9,8 @@ import * as ParkController from "./controllers/ParkController";
 import * as AgencyController from "./controllers/AgencyController";
 import * as TourController from "./controllers/TourController";
 
+import * as FeedController from "./controllers/FeedController";
+
 const upload = multer({
     dest: "./tmp",
     fileFilter: (req, file, cb) => {
@@ -56,5 +58,7 @@ routes.get("/agencies", AgencyController.AllAgencies);
 
 routes.get("/tours", TourController.AllTours);
 routes.post("/tour", upload.single("image"), TourController.Create);
+
+routes.post("/newPost", ensureAuthenticated, upload.single("image"), FeedController.createPost);
 
 export default routes;

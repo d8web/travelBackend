@@ -22,6 +22,8 @@ export const Create = async (req: Request, res: Response) => {
 
     const {
         name,
+        phone,
+        whatsapp,
         mainWaterfall,
         latitude,
         longitude
@@ -38,6 +40,8 @@ export const Create = async (req: Request, res: Response) => {
     const savedPark = await ParkService.insertPark({
         name,
         price,
+        phone,
+        whatsapp,
         wifi,
         bath,
         restaurant,

@@ -23,7 +23,7 @@ export const Create = async (request: Request, response: Response) => {
 export const AuthUser = async (request: Request, response: Response) => {
     const { username, password } = request.body;
 
-    const token = await authenticate({username, password});
+    const token = await authenticate({ username, password });
 
     response.json(token);
 }

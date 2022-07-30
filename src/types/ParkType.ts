@@ -1,6 +1,8 @@
 export interface ParkType {
     name: string;
     price: number;
+    phone: string;
+    whatsapp: string;
     wifi: boolean;
     bath: boolean;
     restaurant: boolean;

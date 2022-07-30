@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { createFolder } from "../helpers/createFolder";
 import { Attractive } from "../types/AttractiveType";
 import * as AttractiveService from "../services/attractiveService";
+import * as ParkService from "../services/parkService";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -24,8 +25,20 @@ export const All = async (req: Request, res: Response) => {
 
 // Add new attractive
 export const NewAttractive = async (req: Request, res: Response) => {
-    const attractiveSaved = await AttractiveService.createAttractive(req.body);
-    return res.status(201).json(attractiveSaved);
+
+    const { idPark } = req.body;
+    const park = await ParkService.getOneParkById(idPark);
+
+    // Verify if park exists before create attractive
+    if(park) {
+        const attractiveSaved = await AttractiveService.createAttractive(req.body);
+        return res.status(201).json(attractiveSaved);
+    } else {
+        return res.status(400).json({
+            error: true,
+            message: "Park does not exists!"
+        });
+    }
 }
 
 // Add images from attractive

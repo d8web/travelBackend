@@ -34,3 +34,9 @@ export const insertPark = async (parkObject: ParkType, image: string) => {
         }
     });
 }
+
+export const getOneParkById = async (id: string) => {
+    return await prisma.park.findUnique({
+        where: { id }
+    })
+}

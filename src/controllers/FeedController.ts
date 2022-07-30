@@ -1,8 +1,10 @@
-import { Request, Response } from "express";
-import * as FeedService from "../services/feedService";
-import validator from "../helpers/validator";
-import { CustomRequest } from "../middlewares/ensureAuthenticated";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
+import { Request, Response } from "express";
+import { CustomRequest } from "../middlewares/ensureAuthenticated";
+import validator from "../helpers/validator";
+import * as FeedService from "../services/feedService";
+import * as UserRelation from "../services/userRelation";
+import * as PostService from "../services/postService";
 
 export const createPost = async (req: Request, res: Response) => {
 
@@ -51,4 +53,21 @@ export const createPost = async (req: Request, res: Response) => {
 
         break;
     }
+}
+
+export const allPosts = async (req: Request, res: Response) => {
+    const users: string[] = [];
+    const user = (req as CustomRequest).user;
+
+    const usersList = await UserRelation.getRelationsFromUser(user as string);
+    if(usersList.length > 0) {
+        for(let i in usersList) {
+            users.push(usersList[i].id);
+        }
+    }
+
+    users.push(user as string);
+
+    const posts = await PostService.getPostsFromUser(users);
+    res.status(200).json(posts);
 }

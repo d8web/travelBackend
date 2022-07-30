@@ -8,8 +8,8 @@ import * as AttractiveController from "./controllers/AttractiveController";
 import * as ParkController from "./controllers/ParkController";
 import * as AgencyController from "./controllers/AgencyController";
 import * as TourController from "./controllers/TourController";
-
 import * as FeedController from "./controllers/FeedController";
+import * as PostController from "./controllers/PostController";
 
 const upload = multer({
     dest: "./tmp",
@@ -33,16 +33,6 @@ routes.post("/auth/refresh", RefreshTokenController.Refresh);
 routes.get("/attractives", AttractiveController.All);
 routes.post("/attractive", AttractiveController.NewAttractive);
 
-routes.get("/courses", ensureAuthenticated, (request: Request, response: Response) => {
-    response.json([
-        { id: 1, name: "Nodejs" },
-        { id: 3, name: "React" },
-        { id: 4, name: "Javascript" },
-        { id: 5, name: "Prisma" },
-        { id: 2, name: "Laravel" },
-    ]);
-});
-
 routes.post("/upload", upload.single("image"), AttractiveController.NewAttractive);
 
 routes.post("/images",  upload.fields([
@@ -60,5 +50,8 @@ routes.get("/tours", TourController.AllTours);
 routes.post("/tour", upload.single("image"), TourController.Create);
 
 routes.post("/newPost", ensureAuthenticated, upload.single("image"), FeedController.createPost);
+routes.get("/posts", ensureAuthenticated, FeedController.allPosts);
+
+routes.post("/post/:id/like", ensureAuthenticated, PostController.Like);
 
 export default routes;

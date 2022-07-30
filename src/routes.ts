@@ -52,6 +52,12 @@ routes.post("/tour", upload.single("image"), TourController.Create);
 routes.post("/newPost", ensureAuthenticated, upload.single("image"), FeedController.createPost);
 routes.get("/posts", ensureAuthenticated, FeedController.allPosts);
 
+// Like and deslike route toogle
 routes.post("/post/:id/like", ensureAuthenticated, PostController.Like);
+
+// Toggle follow route
+routes.post("/user/:id/follow", ensureAuthenticated, UserController.Follow);
+
+routes.get("/user/:id/followers", UserController.Followers);
 
 export default routes;

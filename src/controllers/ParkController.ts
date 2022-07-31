@@ -2,7 +2,6 @@ import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import * as ParkService from "../services/parkService";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 // Get all parks

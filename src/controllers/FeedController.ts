@@ -7,6 +7,7 @@ import * as UserRelation from "../services/userRelation";
 import * as PostService from "../services/postService";
 import * as UserService from "../services/userService";
 
+// Create new post regardless of type
 export const createPost = async (req: Request, res: Response) => {
 
     // const authorId = res.locals.user;
@@ -56,6 +57,7 @@ export const createPost = async (req: Request, res: Response) => {
     }
 }
 
+// Get the all posts from user logged it has relations
 export const allPosts = async (req: Request, res: Response) => {
     const users: string[] = [];
     const user = (req as CustomRequest).user;
@@ -73,6 +75,8 @@ export const allPosts = async (req: Request, res: Response) => {
     res.status(200).json(posts);
 }
 
+// Get the user feed
+// If user sending for equals user logged user id, get feed from user logged
 export const UserFeed = async (req: Request, res: Response) => {
     const loggedUserId = (req as CustomRequest).user as string;
     const idUser = req.params.id;
@@ -97,6 +101,8 @@ export const UserFeed = async (req: Request, res: Response) => {
     }
 }
 
+// Get the photos from user by id
+// If user sending for equals user logged user id, get informations from user logged
 export const PhotosUser = async (req: Request, res: Response) => {
     const loggedUserId = (req as CustomRequest).user as string;
     const idUser = req.params.id;

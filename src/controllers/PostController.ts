@@ -4,6 +4,7 @@ import * as PostService from "../services/postService";
 import * as PostLikeService from "../services/postLikeService";
 import * as PostCommentService from "../services/postCommentService";
 
+// Like a post function
 export const Like = async (req: Request, res: Response) => {
 
     // Verify is post exists
@@ -38,6 +39,7 @@ export const Like = async (req: Request, res: Response) => {
 
 }
 
+// Comment a post
 export const Comment = async (req: Request, res: Response) => {
     
     // Verify is post exists

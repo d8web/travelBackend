@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import * as AgencyService from "../services/agencyService";
 import dotenv from "dotenv"
-
 dotenv.config();
 
+// Get all agencies
 export const AllAgencies = async (req: Request, res: Response) => {
     const agencyList = await AgencyService.getAllAgencies();
 
@@ -15,9 +15,9 @@ export const AllAgencies = async (req: Request, res: Response) => {
     res.status(200).json(agencyList);
 }
 
+// Create a new agency
 export const CreateAgency = async (req: Request, res: Response) => {
     const imageName: string = await resizeAndReturnImage(req.file, "agencies");
-    
     const savedAgency = await AgencyService.insertAgency(req.body, imageName);
     res.json(savedAgency);
 }

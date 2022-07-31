@@ -1,18 +1,23 @@
 import { authenticate, create } from "../services/authService";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
+import dotenv from "dotenv";
+
 import * as UserService from "../services/userService";
 import * as UserRelation from "../services/userRelation";
-import dotenv from "dotenv";
+import * as AttractiveService from "../services/attractiveService";
+import * as FavoriteService from "../services/favoriteService";
 
 dotenv.config();
 
-export const AuthUser = async (request: Request, response: Response) => {
-    const { username, password } = request.body;
+// Login user
+export const AuthUser = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
     const token = await authenticate({ username, password });
-    response.json(token);
+    res.json(token);
 }
 
+// Create user
 export const Create = async (request: Request, response: Response) => {
     const { username, name, password } = request.body;
 
@@ -61,6 +66,7 @@ export const Follow = async (req: Request, res: Response) => {
 
 }
 
+// Get a followers from user
 export const Followers = async (req: Request, res: Response) => {
 
     const id = req.params.id;
@@ -116,4 +122,54 @@ export const Followers = async (req: Request, res: Response) => {
         });
     }
 
+}
+
+// Toogle user favorite
+export const ToogleFavorite = async (req: Request, res: Response) => {
+
+    const { idAttractive } = req.body;
+
+    if(idAttractive) {
+
+        const attractiveExists = await AttractiveService.getOneAttractive(idAttractive);
+        if(attractiveExists) {
+
+            const userId = (req as CustomRequest).user as string;
+            const favoritedIsExists = await FavoriteService.isFavorited(idAttractive, userId);
+
+            const result = {
+                isFavorited: false
+            }
+
+            if(favoritedIsExists) {
+                await FavoriteService.deleteFavorited(favoritedIsExists.id);
+            } else {
+                await FavoriteService.createFavorited(attractiveExists.id, userId);
+                result.isFavorited = true;
+            }
+
+            res.status(200).json(result);
+        }
+
+    }
+
+    res.status(400).json({
+        error: true,
+        message: "Id attractive not found or not send!"
+    });
+}
+
+// Get the list of user favorites
+export const AllFavorites = async (req: Request, res: Response) => {
+    const result = [];
+
+    const userId = (req as CustomRequest).user as string;
+    const favorites = await FavoriteService.getFavorites(userId);
+
+    for(let i in favorites) {
+        let attractive = await AttractiveService.getOneAttractive(favorites[i].idAttractive);
+        result.push(attractive);
+    }
+
+    res.status(200).json(result);
 }

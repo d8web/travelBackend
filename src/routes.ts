@@ -180,4 +180,18 @@ routes.get(
     FeedController.PhotosUser
 );
 
+// Toogle a favorite user
+routes.post(
+    "/user/favorite",
+    ensureAuthenticated,
+    UserController.ToogleFavorite
+);
+
+// Get a list of favorites from user
+routes.get(
+    "/user/favorites",
+    ensureAuthenticated,
+    UserController.AllFavorites
+);
+
 export default routes;

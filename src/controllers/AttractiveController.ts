@@ -6,7 +6,6 @@ import { Attractive } from "../types/AttractiveType";
 import * as AttractiveService from "../services/attractiveService";
 import * as ParkService from "../services/parkService";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 // List of all attractives
@@ -43,11 +42,12 @@ export const NewAttractive = async (req: Request, res: Response) => {
 
 // Add images from attractive
 export const AddImages = async (req: Request, res: Response) => {
-    const { idAttractive } = req.body;
 
+    const { idAttractive } = req.body;
     const attractive = await AttractiveService.getOneAttractive(idAttractive);
+
+    // Verify if attractives exists
     if(attractive) {
-        
         const files = req.files as { [fieldName: string]: Express.Multer.File[] };
 
         const cover = files.cover[0];
@@ -58,7 +58,7 @@ export const AddImages = async (req: Request, res: Response) => {
 
         let names: string[] = [];
 
-        for (let i in files.images) {
+        for(let i in files.images) {
             const fileResult = await resizeAndReturnImage(
                 files.images[i],
                 "moreimages",
@@ -68,9 +68,11 @@ export const AddImages = async (req: Request, res: Response) => {
         }
 
         const savedCoverAndImages = await insertImageAttractive(idAttractive, fileName, names);
-        return res.status(201).json(savedCoverAndImages);
-
+        res.status(201).json(savedCoverAndImages);
     } else {
-        res.status(400).json({ error: true, message: "Attractive not found!" });
+        res.status(400).json({
+            error: true,
+            message: "Attractive not found!"
+        });
     }
 }

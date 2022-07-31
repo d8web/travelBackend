@@ -3,6 +3,7 @@ import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import * as TourService from "../services/tourService";
 import * as AttractiveService from "../services/attractiveService";
 
+// Create a new tour
 export const Create = async (req: Request, res: Response) => {
 
     const imageName: string = await resizeAndReturnImage(req.file, "tours");
@@ -48,6 +49,7 @@ export const Create = async (req: Request, res: Response) => {
     res.json(savedTour);
 }
 
+// Get all tours
 export const AllTours = async (req: Request, res: Response) => {
     const allTours = await TourService.allTours();
     

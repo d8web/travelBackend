@@ -22,42 +22,162 @@ const upload = multer({
 
 const routes = Router();
 
-routes.get("/ping", (request: Request, response: Response) => {
-    response.json({pong: true});
-});
+// Ping route
+routes.get(
+    "/ping",
+    (req: Request, res: Response) =>
+    res.json({pong: true})
+);
 
-routes.post("/auth/create", UserController.Create);
-routes.post("/auth/login", UserController.AuthUser);
-routes.post("/auth/refresh", RefreshTokenController.Refresh);
+// Create user
+routes.post(
+    "/auth/create",
+    UserController.Create
+);
 
-routes.get("/attractives", AttractiveController.All);
-routes.post("/attractive", AttractiveController.NewAttractive);
+// Login user
+routes.post(
+    "/auth/login",
+    UserController.AuthUser
+);
 
-routes.post("/upload", upload.single("image"), AttractiveController.NewAttractive);
+// Refresh token
+routes.post(
+    "/auth/refresh",
+    RefreshTokenController.Refresh
+);
 
-routes.post("/images",  upload.fields([
-    {name: "cover", maxCount: 1},
-    {name: "images", maxCount: 4}
-]), AttractiveController.AddImages);
+// List of attractives
+routes.get(
+    "/attractives",
+    ensureAuthenticated,
+    AttractiveController.All
+);
 
-routes.get("/parks", ParkController.AllParks);
-routes.post("/park", upload.single("image"), ParkController.Create);
+// Add new attractives
+routes.post(
+    "/attractive",
+    ensureAuthenticated,
+    AttractiveController.NewAttractive
+);
 
-routes.post("/agency", upload.single("image"), AgencyController.CreateAgency);
-routes.get("/agencies", AgencyController.AllAgencies);
+// Verify this route
+// routes.post(
+//     "/upload",
+//     ensureAuthenticated,
+//     upload.single("image"),
+//     AttractiveController.NewAttractive
+// );
 
-routes.get("/tours", TourController.AllTours);
-routes.post("/tour", upload.single("image"), TourController.Create);
+// Add images and cover from attractive
+routes.post(
+    "/images",
+    upload.fields([
+        {name: "cover", maxCount: 1},
+        {name: "images", maxCount: 4}
+    ]),
+    AttractiveController.AddImages
+);
 
-routes.post("/newPost", ensureAuthenticated, upload.single("image"), FeedController.createPost);
-routes.get("/posts", ensureAuthenticated, FeedController.allPosts);
+// List of parks
+routes.get(
+    "/parks",
+    ensureAuthenticated,
+    ParkController.AllParks
+);
+
+// Create new park
+routes.post(
+    "/park",
+    ensureAuthenticated,
+    upload.single("image"),
+    ParkController.Create
+);
+
+// Add new agency
+routes.post(
+    "/agency",
+    ensureAuthenticated,
+    upload.single("image"),
+    AgencyController.CreateAgency
+);
+
+// Get list agencies
+routes.get(
+    "/agencies",
+    ensureAuthenticated,
+    AgencyController.AllAgencies
+);
+
+// Get list tours
+routes.get(
+    "/tours",
+    ensureAuthenticated,
+    TourController.AllTours
+);
+
+// Add new tour
+routes.post(
+    "/tour",
+    upload.single("image"),
+    TourController.Create
+);
+
+// Add new post
+routes.post(
+    "/newPost",
+    ensureAuthenticated,
+    upload.single("image"),
+    FeedController.createPost
+);
+
+// Get list posts
+routes.get(
+    "/posts",
+    ensureAuthenticated,
+    FeedController.allPosts
+);
 
 // Like and deslike route toogle
-routes.post("/post/:id/like", ensureAuthenticated, PostController.Like);
+routes.post(
+    "/post/:id/like",
+    ensureAuthenticated,
+    PostController.Like
+);
+
+// Comment post
+routes.post(
+    "/post/:id/comment",
+    ensureAuthenticated,
+    PostController.Comment
+);
 
 // Toggle follow route
-routes.post("/user/:id/follow", ensureAuthenticated, UserController.Follow);
+routes.post(
+    "/user/:id/follow",
+    ensureAuthenticated,
+    UserController.Follow
+);
 
-routes.get("/user/:id/followers", UserController.Followers);
+// Get followers from user, param userId inside at the query params
+routes.get(
+    "/user/:id/followers",
+    ensureAuthenticated,
+    UserController.Followers
+);
+
+// Get Feed from user
+routes.get(
+    "/user/:id/feed",
+    ensureAuthenticated,
+    FeedController.UserFeed
+);
+
+// Get photos from user
+routes.get(
+    "/user/:id/photos",
+    ensureAuthenticated,
+    FeedController.PhotosUser
+);
 
 export default routes;

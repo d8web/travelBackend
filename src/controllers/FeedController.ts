@@ -5,6 +5,7 @@ import validator from "../helpers/validator";
 import * as FeedService from "../services/feedService";
 import * as UserRelation from "../services/userRelation";
 import * as PostService from "../services/postService";
+import * as UserService from "../services/userService";
 
 export const createPost = async (req: Request, res: Response) => {
 
@@ -70,4 +71,52 @@ export const allPosts = async (req: Request, res: Response) => {
 
     const posts = await PostService.getPostsFromUser(users);
     res.status(200).json(posts);
+}
+
+export const UserFeed = async (req: Request, res: Response) => {
+    const loggedUserId = (req as CustomRequest).user as string;
+    const idUser = req.params.id;
+
+    const userExists = await UserService.getOneUserById(idUser);
+    if(userExists) {
+
+        let userSearch = "";
+
+        if(idUser === loggedUserId) {
+            userSearch = loggedUserId;
+        }
+
+        const posts = await PostService.getPostsFromFeedUser(userSearch);
+        res.status(400).json(posts);
+
+    } else {
+        res.json({
+            error: true,
+            message: "User does not exists!"
+        });
+    }
+}
+
+export const PhotosUser = async (req: Request, res: Response) => {
+    const loggedUserId = (req as CustomRequest).user as string;
+    const idUser = req.params.id;
+
+    const userExists = await UserService.getOneUserById(idUser);
+    if(userExists) {
+
+        let userSearch = "";
+
+        if(idUser === loggedUserId) {
+            userSearch = loggedUserId;
+        }
+
+        const postPhotos = await PostService.getPhotosFromUser(userSearch, "photo");
+        res.status(400).json(postPhotos);
+
+    } else {
+        res.json({
+            error: true,
+            message: "User does not exists!"
+        });
+    }
 }

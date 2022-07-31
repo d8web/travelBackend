@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { CustomRequest } from "../middlewares/ensureAuthenticated";
 import * as PostService from "../services/postService";
 import * as PostLikeService from "../services/postLikeService";
-import { CustomRequest } from "../middlewares/ensureAuthenticated";
+import * as PostCommentService from "../services/postCommentService";
 
 export const Like = async (req: Request, res: Response) => {
 
@@ -27,6 +28,35 @@ export const Like = async (req: Request, res: Response) => {
 
         result.likeCount = await PostLikeService.countLikesFromPost(post.id);
         return res.status(200).json(result);
+
+    } else {
+        res.status(400).json({
+            error: true,
+            message: "Post not found or not sending id!"
+        });
+    }
+
+}
+
+export const Comment = async (req: Request, res: Response) => {
+    
+    // Verify is post exists
+    const post = await PostService.getOnePostById(req.params.id);
+    if(post) {
+
+        const { text } = req.body;
+        if(text) {
+
+            const userId = (req as CustomRequest).user as string;
+            const savedComment = await PostCommentService.createComment(post.id, userId, text);
+            res.status(201).json(savedComment);
+
+        } else {
+            res.status(400).json({
+                error: true,
+                message: "Send a comment."
+            });
+        }
 
     } else {
         res.status(400).json({

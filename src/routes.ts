@@ -10,6 +10,7 @@ import * as AgencyController from "./controllers/AgencyController";
 import * as TourController from "./controllers/TourController";
 import * as FeedController from "./controllers/FeedController";
 import * as PostController from "./controllers/PostController";
+import * as ConversationController from "./controllers/ConversationController";
 
 const upload = multer({
     dest: "./tmp",
@@ -192,6 +193,26 @@ routes.get(
     "/user/favorites",
     ensureAuthenticated,
     UserController.AllFavorites
+);
+
+// Insert a new conversation in the database
+routes.post(
+    "/conversation",
+    ensureAuthenticated,
+    ConversationController.Create
+);
+
+// Get the conversations by user
+routes.get(
+    "/conversations",
+    ensureAuthenticated,
+    ConversationController.FindConversation
+);
+
+routes.get(
+    "/conversations/find/:id",
+    ensureAuthenticated,
+    ConversationController.findByTwoUsers
 );
 
 export default routes;

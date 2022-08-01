@@ -11,6 +11,7 @@ import * as TourController from "./controllers/TourController";
 import * as FeedController from "./controllers/FeedController";
 import * as PostController from "./controllers/PostController";
 import * as ConversationController from "./controllers/ConversationController";
+import * as MessageController from "./controllers/MessageController";
 
 const upload = multer({
     dest: "./tmp",
@@ -209,10 +210,18 @@ routes.get(
     ConversationController.FindConversation
 );
 
+// Get messages by user logged and id sending in req.params
 routes.get(
     "/conversations/find/:id",
     ensureAuthenticated,
-    ConversationController.findByTwoUsers
+    ConversationController.FindByTwoUsers
+);
+
+// Add new message
+routes.post(
+    "/messages",
+    ensureAuthenticated,
+    MessageController.createMessage
 );
 
 export default routes;

@@ -60,7 +60,7 @@ export const FindConversation = async (req: Request, res: Response) => {
 }
 
 // Get the unique conversation
-export const findByTwoUsers = async (req: Request, res: Response) => {
+export const FindByTwoUsers = async (req: Request, res: Response) => {
 
     const { id } = req.params;
     const userLogged = (req as CustomRequest).user as string;

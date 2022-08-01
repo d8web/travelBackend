@@ -8,12 +8,18 @@ export const create = async (senderId: string, receiverId: string) => {
     });
 }
 
+export const conversationExistsById = async (id: string) => {
+    return await client.conversation.findFirst({
+        where: { id }
+    });
+}
+
 export const getConversationsById = async (id: string) => {
     return await client.conversation.findMany({
         where: {
             members: {
                 has: id
-            }
+            },
         }
     });
 }
@@ -22,7 +28,7 @@ export const getOneConversationByMembers = async (loggedId: string, id: string) 
     return await client.conversation.findFirst({
         where: {
             members: {
-                hasEvery: [loggedId, id]
+                equals: [loggedId, id]
             }
         }
     });

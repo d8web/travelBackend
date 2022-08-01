@@ -5,6 +5,7 @@ import * as AccommodationController from "./controllers/AccommodationController"
 import * as RefreshTokenController from "./controllers/RefreshTokenController";
 import * as ConversationController from "./controllers/ConversationController";
 import * as AttractiveController from "./controllers/AttractiveController";
+import * as BusinessController from "./controllers/BusinessController";
 import * as MessageController from "./controllers/MessageController";
 import * as AgencyController from "./controllers/AgencyController";
 import * as UserController from "./controllers/UserController";
@@ -246,6 +247,28 @@ routes.get(
     "/accommodation/:id",
     ensureAuthenticated,
     AccommodationController.GetOneAcommodation
+);
+
+// Get all Business
+routes.get(
+    "/business",
+    ensureAuthenticated,
+    BusinessController.All
+);
+
+// Get one business
+routes.get(
+    "/business/:id",
+    ensureAuthenticated,
+    BusinessController.One
+);
+
+// Create business
+routes.post(
+    "/business",
+    ensureAuthenticated,
+    upload.single("image"),
+    BusinessController.Create
 );
 
 export default routes;

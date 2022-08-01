@@ -1,17 +1,19 @@
 import { Request, Response, Router } from "express";
 import { ensureAuthenticated } from "./middlewares/ensureAuthenticated";
-import multer from "multer";
 
-import * as UserController from "./controllers/UserController";
+import * as AccommodationController from "./controllers/AccommodationController";
 import * as RefreshTokenController from "./controllers/RefreshTokenController";
+import * as ConversationController from "./controllers/ConversationController";
 import * as AttractiveController from "./controllers/AttractiveController";
-import * as ParkController from "./controllers/ParkController";
+import * as MessageController from "./controllers/MessageController";
 import * as AgencyController from "./controllers/AgencyController";
+import * as UserController from "./controllers/UserController";
+import * as ParkController from "./controllers/ParkController";
 import * as TourController from "./controllers/TourController";
 import * as FeedController from "./controllers/FeedController";
 import * as PostController from "./controllers/PostController";
-import * as ConversationController from "./controllers/ConversationController";
-import * as MessageController from "./controllers/MessageController";
+
+import multer from "multer";
 
 const upload = multer({
     dest: "./tmp",
@@ -222,6 +224,28 @@ routes.post(
     "/messages",
     ensureAuthenticated,
     MessageController.createMessage
+);
+
+// Get all accommodations
+routes.get(
+    "/accommodations",
+    ensureAuthenticated,
+    AccommodationController.AllAccomodations
+);
+
+// Add new accommodation
+routes.post(
+    "/accommodation",
+    ensureAuthenticated,
+    upload.single("image"),
+    AccommodationController.Create
+);
+
+// Get one accommodation
+routes.get(
+    "/accommodation/:id",
+    ensureAuthenticated,
+    AccommodationController.GetOneAcommodation
 );
 
 export default routes;

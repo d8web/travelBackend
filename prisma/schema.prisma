@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -11,9 +8,10 @@ datasource db {
 }
 
 model User {
-    id       String @id @default(uuid())
+    id       String  @id @default(uuid())
     name     String
-    username String @unique
+    type     String? @default("standard")
+    email    String  @unique
     password String
 
     birthdate  DateTime?
@@ -22,6 +20,7 @@ model User {
     avatar     String?   @default("avatar.jpg")
     cover      String?   @default("cover.jpg")
     paid       Boolean?  @default(false) // Se pagou ou não
+    tokenPaid  String?
     usedTheMap Int?      @default(0) // Quantas vezes usou o mapa, passou de 5 solicitar pagamento
 
     createdAt DateTime @default(now())
@@ -29,23 +28,46 @@ model User {
 
     refreshToken RefreshToken?
 
-    posts     Post[]
-    likes     PostLikes[]
-    relations UserRelations[]
-    comments  PostComments[]
-    favorites UserFavorites[]
-    review    Review[]
+    posts              Post[]
+    likes              PostLike[]
+    relations          UserRelation[]
+    comments           PostComment[]
+    favorites          UserFavorite[]
+    attractiveReviews  AttractiveReview[]
+    appointments       UserAppointment[]
+    ServiceReview      ServiceReview[]
+    ServiceTestimonial ServiceTestimonial[]
 
     @@map("users")
+}
+
+model UserAppointment {
+    id                  String @id @default(uuid())
+    idUser              String // id user to appointment agency
+    idAgency            String // ID agency
+    idService           String // Id service
+    numberOfPeoples     String // Number of peoples
+    appointmentDatetime String // Datetime from appointment to user from agency
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user User @relation(fields: [idUser], references: [id])
+
+    @@map("user_appointments")
 }
 
 model RefreshToken {
     id        String @id @default(uuid())
     expiresIn Int
-    user      User   @relation(fields: [userId], references: [id])
-    userId    String @unique
 
-    @@map("refreshtoken")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
+
+    @@map("refresh_tokens")
 }
 
 model Attractives {
@@ -55,18 +77,19 @@ model Attractives {
     name                String
     title               String
     description         String?
+    cover               String?  @default("cover.jpg")
     price               Float
     latitude            String
     longitude           String
     location            String
-    vehicleRecomended   Boolean
+    vehicleRecomended   Boolean? @default(false)
     polluted            Boolean? @default(false)
     guide               Boolean? @default(false)
     propertyPrivate     Boolean? @default(true)
     popularLocation     Boolean? @default(false)
     rate                Float?   @default(4)
     walkingLevel        String?  @default("Fácil/Médio")
-    averageWalkingTime  String // Tempo médio de caminhada até o atrativo
+    averageWalkingTime  String?  @default("Entre 5 a 10 minutos") // Tempo médio de caminhada até o atrativo
     slipperyStones      Boolean? @default(true)
     distanceOfCarrancas String
     placeForChildren    Boolean? @default(true)
@@ -75,14 +98,30 @@ model Attractives {
     bestPhotos          Boolean? @default(true)
     observations        String?
 
-    images  Image[]
-    reviews Review[]
-    parks   Park?    @relation(fields: [idPark], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    images            ImagesAttractive[]
+    attractiveReviews AttractiveReview[]
+    parks             Park?              @relation(fields: [idPark], references: [id])
 
     @@map("attractives")
 }
 
-model UserRelations {
+model ImagesAttractive {
+    id           String   @id @default(uuid())
+    idAttractive String
+    images       String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    attractive Attractives @relation(fields: [idAttractive], references: [id])
+
+    @@map("images_attractives")
+}
+
+model UserRelation {
     id       String @id @default(uuid())
     userFrom String
     userTo   String
@@ -92,7 +131,7 @@ model UserRelations {
 
     user User @relation(fields: [userFrom], references: [id])
 
-    @@map("userrelations")
+    @@map("user_relations")
 }
 
 model Post {
@@ -106,13 +145,13 @@ model Post {
     author   User   @relation(fields: [authorId], references: [id])
     authorId String @default(uuid())
 
-    likes    PostLikes[]
-    comments PostComments[]
+    likes    PostLike[]
+    comments PostComment[]
 
     @@map("posts")
 }
 
-model PostLikes {
+model PostLike {
     id     String @id @default(uuid())
     idPost String
     idUser String
@@ -123,10 +162,10 @@ model PostLikes {
     user User @relation(fields: [idUser], references: [id])
     post Post @relation(fields: [idPost], references: [id])
 
-    @@map("postlikes")
+    @@map("post_likes")
 }
 
-model PostComments {
+model PostComment {
     id     String @id @default(uuid())
     idPost String
     idUser String
@@ -138,24 +177,10 @@ model PostComments {
     user User @relation(fields: [idUser], references: [id])
     post Post @relation(fields: [idPost], references: [id])
 
-    @@map("postcomments")
+    @@map("post_comments")
 }
 
-model Image {
-    id           String   @id @default(uuid())
-    idAttractive String
-    cover        String?  @default("cover.jpg")
-    url          String[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    attractive Attractives @relation(fields: [idAttractive], references: [id])
-
-    @@map("images")
-}
-
-model UserFavorites {
+model UserFavorite {
     id           String @id @default(uuid())
     idUser       String
     idAttractive String
@@ -165,10 +190,10 @@ model UserFavorites {
 
     user User @relation(fields: [idUser], references: [id])
 
-    @@map("userfavorites")
+    @@map("user_favorites")
 }
 
-model Review {
+model AttractiveReview {
     id           String  @id @default(uuid())
     idAttractive String
     idUser       String
@@ -181,53 +206,160 @@ model Review {
     user       User        @relation(fields: [idUser], references: [id])
     attractive Attractives @relation(fields: [idAttractive], references: [id])
 
-    @@map("reviews")
+    @@map("attractive_reviews")
 }
 
 model Park {
-    id            String  @id @default(uuid())
-    name          String
-    image         String? @default("cover.jpg")
-    price         Float
-    phone         String?
-    whatsapp      String?
-    wifi          Boolean
-    bath          Boolean
-    restaurant    Boolean
-    parking       Boolean
-    private       Boolean
-    hotel         Boolean
-    mainWaterfall String?
-    latitude      String
-    longitude     String
+    id                String   @id @default(uuid())
+    name              String
+    image             String?  @default("cover.jpg")
+    price             Float
+    phone             String?
+    whatsapp          String?
+    wifi              Boolean
+    bath              Boolean
+    restaurant        Boolean
+    parking           Boolean
+    private           Boolean
+    hotel             Boolean
+    mainWaterfall     String?
+    latitude          String
+    longitude         String
+    facebook          String?
+    instagram         String?
+    othersSocialMedia String[] @default([])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     attractiveList Attractives[]
+    images         ImagePark[]
 
     @@map("parks")
 }
 
-model Agency {
-    id               String  @id @default(uuid())
-    name             String
-    address          String?
-    type             String? @default("agency")
-    image            String? @default("cover.jpg")
-    website          String?
-    phone            String?
-    whatsapp         String?
-    facebook         String?
-    instagram        String?
-    otherSocialMedia String?
+model ImagePark {
+    id     String   @id @default(uuid())
+    idPark String
+    images String[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    tours Tour[]
+    park Park @relation(fields: [idPark], references: [id])
 
-    @@map("agency")
+    @@map("images_parks")
+}
+
+model Agency {
+    id                String   @id @default(uuid())
+    name              String
+    address           String?
+    type              String?  @default("agency")
+    image             String?  @default("cover.jpg")
+    website           String?
+    phone             String?
+    whatsapp          String?
+    facebook          String?
+    instagram         String?
+    othersSocialMedia String[] @default([])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tours               Tour[]
+    imagesAgency        ImageAgency[]
+    services            Service[]
+    ServiceAvailability ServiceAvailability[]
+    ServiceReviews      ServiceReview[]
+    ServiceTestimonials ServiceTestimonial[]
+
+    @@map("agencies")
+}
+
+model Service {
+    id       String @id @default(uuid())
+    idAgency String // Idenfifier agency
+    name     String // Name service of agency
+    price    String // Agency Pricing Service
+    tours    String[] // Tours included that service
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    agency              Agency                @relation(fields: [idAgency], references: [id])
+    availability        ServiceAvailability[]
+    ServiceReviews      ServiceReview[]
+    ServiceTestimonials ServiceTestimonial[]
+
+    @@map("services")
+}
+
+model ServiceAvailability {
+    id       String  @id @default(uuid())
+    idAgency String?
+
+    weekday           Int // Day week of job the service
+    numberOfVacancies Int // Number of vacancies ex 10, if two peoples reserved some more 8 vacancies
+    hours             String @db.Text // Hours of days of job the service
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    agency     Agency?  @relation(fields: [idAgency], references: [id])
+    Services   Service? @relation(fields: [servicesId], references: [id])
+    servicesId String?
+
+    @@map("service_availability")
+}
+
+model ServiceReview {
+    id        String @id @default(uuid())
+    idService String
+    idAgency  String // Idenfifier service
+    idUser    String
+    rate      Float // Note from service
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user    User    @relation(fields: [idUser], references: [id])
+    service Service @relation(fields: [idService], references: [id])
+    agency  Agency  @relation(fields: [idAgency], references: [id])
+
+    @@map("service_reviews")
+}
+
+model ServiceTestimonial {
+    id        String @id @default(uuid())
+    idAgency  String // Idenfifier agency
+    idService String
+    idUser    String
+    name      String // Name client tertimonial
+    rate      Float // Note drom service
+    body      String // The Body testimonial
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user    User    @relation(fields: [idUser], references: [id])
+    agency  Agency  @relation(fields: [idAgency], references: [id])
+    service Service @relation(fields: [idService], references: [id])
+
+    @@map("service_testimonials")
+}
+
+model ImageAgency {
+    id       String   @id @default(uuid())
+    idAgency String
+    images   String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    agency Agency @relation(fields: [idAgency], references: [id])
+
+    @@map("images_agencies")
 }
 
 model Tour {
@@ -243,6 +375,7 @@ model Tour {
     maxPeople             Int?
     minPeople             Int?     @default(0)
     pricePerPeople        Float
+    duration              String
     specialPrice          Float?
     descriptionTour       String?
     whatsToTake           String?
@@ -252,9 +385,23 @@ model Tour {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    agency Agency @relation(fields: [idAgency], references: [id])
+    agency Agency       @relation(fields: [idAgency], references: [id])
+    images ImagesTour[]
 
     @@map("tours")
+}
+
+model ImagesTour {
+    id     String   @id @default(uuid())
+    idTour String
+    images String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tour Tour @relation(fields: [idTour], references: [id])
+
+    @@map("images_tours")
 }
 
 model Accommodation {
@@ -264,13 +411,31 @@ model Accommodation {
     phone             String?
     whatsapp          String?
     website           String?
+    facebook          String?
+    instagram         String?
     booking           String?
+    othersSocialMedia String[] @default([])
     bestaccommodation Boolean?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    imageAccommodation ImageAccommodation[]
+
     @@map("accommodations")
+}
+
+model ImageAccommodation {
+    id              String   @id @default(uuid())
+    idAccommodation String
+    images          String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    acommodation Accommodation @relation(fields: [idAccommodation], references: [id])
+
+    @@map("images_accommodations")
 }
 
 model Conversation {
@@ -286,12 +451,13 @@ model Conversation {
 }
 
 model Message {
-    id             String   @id @default(uuid())
+    id             String @id @default(uuid())
     conversationId String
     sender         String
     text           String
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     conversation Conversation @relation(fields: [conversationId], references: [id])
 
@@ -299,18 +465,77 @@ model Message {
 }
 
 model Business {
-    id               String  @id @default(uuid())
-    name             String
-    address          String?
-    type             String
-    image            String? @default("cover.jpg")
-    website          String?
-    phone            String?
-    whatsapp         String?
-    facebook         String?
-    instagram        String?
-    otherSocialMedia String?
+    id                String   @id @default(uuid())
+    name              String
+    type              String
+    address           String?
+    image             String?  @default("cover.jpg")
+    website           String?
+    phone             String?
+    whatsapp          String?
+    facebook          String?
+    instagram         String?
+    othersSocialMedia String[] @default([])
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    imageBusiness ImageBusiness[]
+
+    @@map("business")
+}
+
+model ImageBusiness {
+    id         String   @id @default(uuid())
+    idBusiness String
+    images     String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    business Business @relation(fields: [idBusiness], references: [id])
+
+    @@map("images_business")
+}
+
+model Food {
+    id                String   @id @default(uuid())
+    type              String
+    name              String
+    image             String?  @default("cover.jpg")
+    phone             String?
+    whatsapp          String?
+    hourOpen          String?
+    hourClosed        String?
+    delivery          Boolean? @default(true) // Has delivery
+    menu              String[] @default([])
+    website           String?
+    facebook          String?
+    instagram         String?
+    othersSocialMedia String[] @default([])
+    acceptReservation Boolean? @default(false) // Accept reservation [Aceita reserva]
+    acceptOrders      Boolean? @default(false) // Accept orders [Aceita encomendas]
+    reference         String?
+    bestfood          Boolean?
+    observations      String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    ImageFood ImageFood[]
+
+    @@map("foods")
+}
+
+model ImageFood {
+    id     String   @id @default(uuid())
+    idFood String
+    images String[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    food Food @relation(fields: [idFood], references: [id])
+
+    @@map("image_foods")
 }

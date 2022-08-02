@@ -3,8 +3,11 @@ import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { createFolder } from "../helpers/createFolder";
 import { Attractive } from "../types/AttractiveType";
+import { slugify } from "../helpers/manipulateFolderName";
+
 import * as AttractiveService from "../services/attractiveService";
 import * as ParkService from "../services/parkService";
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -53,8 +56,8 @@ export const AddImages = async (req: Request, res: Response) => {
         const cover = files.cover[0];
         const fileName = await resizeAndReturnImage(cover, "attractives");
 
-        const folder = attractive.name.toLowerCase();
-        createFolder(folder);
+        const folder = attractive.name;
+        createFolder(slugify(folder));
 
         let names: string[] = [];
 
@@ -67,8 +70,16 @@ export const AddImages = async (req: Request, res: Response) => {
             names.push(fileResult);
         }
 
-        const savedCoverAndImages = await insertImageAttractive(idAttractive, fileName, names);
-        res.status(201).json(savedCoverAndImages);
+        try {
+            const savedCoverAndImages = await insertImageAttractive(idAttractive, fileName, names);
+            res.status(201).json(savedCoverAndImages);
+        } catch(err) {
+            res.status(400).json({
+                error: true,
+                message: "Ocorreu um erro!",
+                realMessage: err
+            });
+        }
     } else {
         res.status(400).json({
             error: true,

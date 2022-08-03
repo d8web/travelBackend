@@ -28,7 +28,7 @@ export const insertAgency = async (agencyObject: AgencyType, image?: string) => 
             whatsapp: agencyObject.whatsapp,
             facebook: agencyObject.facebook,
             instagram: agencyObject.instagram,
-            otherSocialMedia: agencyObject.otherSocialMedia,
+            othersSocialMedia: agencyObject.othersSocialMedia,
         }
     });
 }

@@ -12,4 +12,7 @@ export interface ParkType {
     mainWaterfall: string;
     latitude: string;
     longitude: string;
+    facebook: string;
+    instagram: string;
+    othersSocialMedia: string[]
 }

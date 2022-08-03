@@ -23,7 +23,7 @@ export const createBusiness = async (businessData: BusinessType) => {
             whatsapp: businessData.whatsapp,
             facebook: businessData.facebook,
             instagram: businessData.instagram,
-            otherSocialMedia: businessData.otherSocialMedia
+            othersSocialMedia: businessData.othersSocialMedia
         }
     });
 }

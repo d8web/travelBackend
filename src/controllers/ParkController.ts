@@ -25,7 +25,10 @@ export const Create = async (req: Request, res: Response) => {
         whatsapp,
         mainWaterfall,
         latitude,
-        longitude
+        longitude,
+        facebook,
+        instagram,
+        othersSocialMedia,
     } = req.body;
 
     const price = parseFloat(req.body.price);
@@ -49,7 +52,10 @@ export const Create = async (req: Request, res: Response) => {
         hotel,
         mainWaterfall,
         latitude,
-        longitude
+        longitude,
+        facebook,
+        instagram,
+        othersSocialMedia,
     }, imageName);
     
     res.status(201).json(savedPark);

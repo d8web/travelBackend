@@ -4,10 +4,10 @@ import { GenerateRefreshToken } from "../provider/GenerateRefreshToken";
 import { hash, compare } from "bcryptjs";
 import { client } from "../prisma/client";
 
-export const create = async ({ name, username, password }: UserRequest) => {
+export const create = async ({ name, email, password }: UserRequest) => {
     // Verificar se o usuário existe!
     const userAlreadyExists = await client.user.findFirst({
-        where: { username }
+        where: { email }
     });
 
     if (userAlreadyExists) {
@@ -20,7 +20,7 @@ export const create = async ({ name, username, password }: UserRequest) => {
     const user = await client.user.create({
         data: {
             name,
-            username,
+            email,
             password: passwordHash
         }
     });
@@ -28,10 +28,10 @@ export const create = async ({ name, username, password }: UserRequest) => {
     return user;
 }
 
-export const authenticate = async ({ username, password }: AuthRequest) => {
+export const authenticate = async ({ email, password }: AuthRequest) => {
     // Verificar se o usuário existe!
     const userAlreadyExists = await client.user.findFirst({
-        where: { username }
+        where: { email }
     });
 
     if (!userAlreadyExists) {

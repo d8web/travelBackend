@@ -1,10 +1,10 @@
 export interface AuthRequest {
-    username: string;
+    email: string;
     password: string;
 }
 
 export interface UserRequest {
     name: string;
-    username: string;
+    email: string;
     password: string;
 }

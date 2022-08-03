@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
 import validator from "../helpers/validator";
 import * as FeedService from "../services/feedService";
-import * as UserRelation from "../services/userRelation";
+import * as UserRelation from "../services/userRelationService";
 import * as PostService from "../services/postService";
 import * as UserService from "../services/userService";
 

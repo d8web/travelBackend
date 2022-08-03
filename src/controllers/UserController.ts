@@ -1,34 +1,13 @@
-import { authenticate, create } from "../services/authService";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
 import dotenv from "dotenv";
 
 import * as UserService from "../services/userService";
-import * as UserRelation from "../services/userRelation";
+import * as UserRelation from "../services/userRelationService";
 import * as AttractiveService from "../services/attractiveService";
 import * as FavoriteService from "../services/favoriteService";
 
 dotenv.config();
-
-// Login user
-export const AuthUser = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-    const token = await authenticate({ username, password });
-    res.json(token);
-}
-
-// Create user
-export const Create = async (request: Request, response: Response) => {
-    const { username, name, password } = request.body;
-
-    const user = await create({
-        name,
-        username,
-        password
-    });
-
-    response.json(user);
-}
 
 export const Follow = async (req: Request, res: Response) => {
 

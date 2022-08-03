@@ -10,22 +10,18 @@ export const getAllAttractives = async () => {
             idPark: true,
             name: true,
             price: true,
-            images: {
-                select: {
-                    cover: true
-                }
-            }
         }
     });
 }
 
-export const createAttractive = async (attractive: Attractive) => {
+export const createAttractive = async (attractive: Attractive, image: string) => {
     return await prisma.attractives.create({
         data: {
             idPark: attractive.idPark,
             type: attractive.type,
             name: attractive.name,
             title: attractive.title,
+            cover: image,
             description: attractive.description,
             price: attractive.price,
             latitude: attractive.latitude,
@@ -68,11 +64,6 @@ export const getAttractivesFromTour = async (ids: string[]) => {
             id: true,
             name: true,
             price: true,
-            images: {
-                select: {
-                    cover: true
-                }
-            }
         },
         where: {
             id: {

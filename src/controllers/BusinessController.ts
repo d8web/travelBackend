@@ -27,7 +27,7 @@ export const Create = async (req: Request, res: Response) => {
                 phone,
                 whatsapp,
                 website,
-                otherSocialMedia,
+                othersSocialMedia,
                 instagram,
                 facebook,
             } = req.body;
@@ -49,7 +49,7 @@ export const Create = async (req: Request, res: Response) => {
                     website,
                     instagram,
                     facebook,
-                    otherSocialMedia,
+                    othersSocialMedia,
                 });
 
                 res.status(201).json(savedBusiness);

@@ -1,7 +1,7 @@
 import { client } from "../prisma/client";
 
 export const getRelationsFromUser= async (idUser: string) => {
-    return client.userRelations.findMany({
+    return client.userRelation.findMany({
         where: {
             userFrom: idUser
         }
@@ -9,7 +9,7 @@ export const getRelationsFromUser= async (idUser: string) => {
 }
 
 export const verifyRelation = async (userFrom: string, userTo: string) => {
-    return client.userRelations.findFirst({
+    return client.userRelation.findFirst({
         where: {
             userFrom,
             userTo
@@ -18,7 +18,7 @@ export const verifyRelation = async (userFrom: string, userTo: string) => {
 }
 
 export const deleteRelation = async (id: string) => {
-    return await client.userRelations.delete({
+    return await client.userRelation.delete({
         where: {
             id
         }
@@ -26,7 +26,7 @@ export const deleteRelation = async (id: string) => {
 }
 
 export const insertRelation = async (userFrom: string, userTo: string) => {
-    return await client.userRelations.create({
+    return await client.userRelation.create({
         data: {
             userFrom,
             userTo
@@ -35,7 +35,7 @@ export const insertRelation = async (userFrom: string, userTo: string) => {
 }
 
 export const getFollowers = async (userTo: string) => {
-    return await client.userRelations.findMany({
+    return await client.userRelation.findMany({
         where: {
             userTo
         }
@@ -43,7 +43,7 @@ export const getFollowers = async (userTo: string) => {
 }
 
 export const getFollowing = async (userFrom: string) => {
-    return await client.userRelations.findMany({
+    return await client.userRelation.findMany({
         where: {
             userFrom
         }

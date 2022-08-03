@@ -1,4 +1,4 @@
-import { insertImageAttractive } from "../services/imagesService";
+import { insertImageAttractive } from "../services/imagesAttractiveService";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { createFolder } from "../helpers/createFolder";
@@ -33,7 +33,7 @@ export const NewAttractive = async (req: Request, res: Response) => {
 
     // Verify if park exists before create attractive
     if(park) {
-        const attractiveSaved = await AttractiveService.createAttractive(req.body);
+        const attractiveSaved = await AttractiveService.createAttractive(req.body, "");
         return res.status(201).json(attractiveSaved);
     } else {
         return res.status(400).json({
@@ -71,7 +71,7 @@ export const AddImages = async (req: Request, res: Response) => {
         }
 
         try {
-            const savedCoverAndImages = await insertImageAttractive(idAttractive, fileName, names);
+            const savedCoverAndImages = await insertImageAttractive(idAttractive, names);
             res.status(201).json(savedCoverAndImages);
         } catch(err) {
             res.status(400).json({

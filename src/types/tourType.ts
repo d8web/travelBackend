@@ -10,6 +10,7 @@ export interface TourType {
     groups: boolean;
     maxPeople?: number;
     minPeople?: number;
+    duration: string;
     pricePerPeople: number;
     specialPrice: number;
     descriptionTour: string;

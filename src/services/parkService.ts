@@ -30,7 +30,10 @@ export const insertPark = async (parkObject: ParkType, image: string) => {
             hotel: parkObject.hotel,
             mainWaterfall: parkObject.mainWaterfall,
             latitude: parkObject.latitude,
-            longitude: parkObject.longitude
+            longitude: parkObject.longitude,
+            facebook: parkObject.facebook,
+            instagram: parkObject.instagram,
+            othersSocialMedia: parkObject.othersSocialMedia
         }
     });
 }

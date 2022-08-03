@@ -16,6 +16,7 @@ export const insertTour = async (tourObject: TourType, image?: string) => {
             groups: tourObject.groups,
             maxPeople: tourObject.maxPeople,
             minPeople: tourObject.minPeople,
+            duration: tourObject.duration,
             pricePerPeople: tourObject.pricePerPeople,
             specialPrice: tourObject.specialPrice,
             descriptionTour: tourObject.descriptionTour,

@@ -3,7 +3,7 @@ import "express-async-errors";
 import path from "path";
 import http from "http";
 import cors from "cors";
-import routes from "../routes";
+import routes from "../routes/index";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,7 +17,18 @@ app.use(express.static(path.join(__dirname, "/../../", "public")));
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", routes);
+app.use("/api/auth", routes.AuthRoutes);
+app.use("/api/users", routes.UserRoutes);
+app.use("/api/attractives", routes.AttractivesRoutes);
+app.use("/api/agencies", routes.AgenciesRoutes);
+app.use("/api/tours", routes.ToursRoutes);
+app.use("/api/business", routes.BusinessRoutes);
+app.use("/api/parks", routes.ParksRoutes);
+app.use("/api/accommodations", routes.AccommodationRoutes);
+app.use("/api/posts", routes.PostsRoutes);
+app.use("/api/feed", routes.FeedRoutes);
+app.use("/api/conversations", routes.ConversationsRoutes);
+app.use("/api/messages", routes.MessagesRoutes);
 
 app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
     return response.json({

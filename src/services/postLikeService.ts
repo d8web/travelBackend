@@ -1,7 +1,7 @@
 import { client } from "../prisma/client";
 
 export const Like = async (idPost: string, idUser: string) => {
-    return await client.postLikes.create({
+    return await client.postLike.create({
         data: {
             idPost,
             idUser
@@ -10,13 +10,13 @@ export const Like = async (idPost: string, idUser: string) => {
 }
 
 export const Deslike = async (id: string) => {
-    return await client.postLikes.delete({
+    return await client.postLike.delete({
         where: { id }
     })
 }
 
 export const VerifyIsLiked = async (idPost: string, idUser: string) => {
-    return await client.postLikes.findFirst({
+    return await client.postLike.findFirst({
         where: {
             idPost,
             idUser
@@ -25,7 +25,7 @@ export const VerifyIsLiked = async (idPost: string, idUser: string) => {
 }
 
 export const countLikesFromPost = async (id: string) => {
-    return client.postLikes.count({
+    return client.postLike.count({
         where: {
             idPost: id
         }

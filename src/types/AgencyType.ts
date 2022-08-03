@@ -9,5 +9,5 @@ export interface AgencyType {
     whatsapp: string;
     facebook: string;
     instagram: string;
-    otherSocialMedia: string;
+    othersSocialMedia: string[];
 }

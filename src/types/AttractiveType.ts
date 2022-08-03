@@ -3,7 +3,7 @@ export interface Attractive {
     idPark?: string;
     type?: string;
     name?: string;
-    images?: any;
+    cover?: string;
     title?: string;
     description?: string;
     price?: number;

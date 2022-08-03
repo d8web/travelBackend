@@ -32,3 +32,9 @@ export const insertAgency = async (agencyObject: AgencyType, image?: string) => 
         }
     });
 }
+
+export const getOneAgency = async (id: string) => {
+    return prisma.agency.findFirst({
+        where: { id }
+    });
+}

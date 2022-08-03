@@ -11,18 +11,18 @@ routes.post(
     ConversationController.Create
 );
 
-// Get the conversations by user
-routes.get(
-    "/",
-    ensureAuthenticated,
-    ConversationController.FindConversation
-);
-
 // Get messages by user logged and id sending in req.params
 routes.get(
     "/find/:id",
     ensureAuthenticated,
     ConversationController.FindByTwoUsers
+);
+
+// Get the conversations by user
+routes.get(
+    "/",
+    ensureAuthenticated,
+    ConversationController.FindConversation
 );
 
 export default routes;

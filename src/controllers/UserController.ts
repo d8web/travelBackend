@@ -130,12 +130,13 @@ export const ToogleFavorite = async (req: Request, res: Response) => {
             res.status(200).json(result);
         }
 
+    } else {
+        res.status(400).json({
+            error: true,
+            message: "Id attractive not found or not send!"
+        });
     }
 
-    res.status(400).json({
-        error: true,
-        message: "Id attractive not found or not send!"
-    });
 }
 
 // Get the list of user favorites

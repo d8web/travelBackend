@@ -9,7 +9,7 @@ export const AllParks = async (req: Request, res: Response) => {
     const parks = await ParkService.getAllParks();
     
     for(let i in parks) {
-        parks[i].image = `${process.env.BASE_URL}/parks/${parks[i].image}`
+        parks[i].image = `${process.env.BASE_URL}/media/images/parks/${parks[i].image}`
     }
 
     res.status(200).json(parks);

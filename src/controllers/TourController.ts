@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { TourService, AgencyService } from "../services/index";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
-import * as TourService from "../services/tourService";
+import { Request, Response } from "express";
+import { unlink } from "fs/promises";
 import * as AttractiveService from "../services/attractiveService";
 
 // Create a new tour
@@ -23,32 +24,50 @@ export const Create = async (req: Request, res: Response) => {
         observations
     } = req.body;
 
-    const array = req.body.attractives;
-    const attractives = array.split(",");
-
-    const pricePerPeople = parseFloat(req.body.pricePerPeople);
-    const groups = req.body.groups === "true";
-    const maxPeople = parseInt(req.body.maxPeople);
-
-    const savedTour = await TourService.insertTour({
-        idAgency,
-        attractives,
-        name,
-        meansOfLocomotion,
-        guidesOnVehicleClient,
-        video,
-        groups,
-        maxPeople,
-        minPeople,
-        duration,
-        pricePerPeople,
-        specialPrice,
-        descriptionTour,
-        whatsToTake,
-        hasWalk,
-        observations
-    }, imageName);
-    res.json(savedTour);
+    const agencyExists = await AgencyService.getOneAgency(idAgency);
+    
+    if(agencyExists) {
+        const array = req.body.attractives;
+        const attractives = array.split(",");
+    
+        const pricePerPeople = parseFloat(req.body.pricePerPeople);
+        const groups = req.body.groups === "true";
+        const maxPeople = parseInt(req.body.maxPeople);
+    
+        try {
+            const savedTour = await TourService.insertTour({
+                idAgency,
+                attractives,
+                name,
+                meansOfLocomotion,
+                guidesOnVehicleClient,
+                video,
+                groups,
+                maxPeople,
+                minPeople,
+                duration,
+                pricePerPeople,
+                specialPrice,
+                descriptionTour,
+                whatsToTake,
+                hasWalk,
+                observations
+            }, imageName);
+            res.json(savedTour);
+        } catch(err) {
+            await unlink("./public/media/images/tours/"+imageName)
+            res.status(400).json({
+                error: true,
+                message: "An error has occurred",
+                realError: err
+            });
+        }
+    } else {
+        res.status(400).json({
+            error: true,
+            message: "Agency not exists or not found!"
+        });
+    }
 }
 
 // Get all tours
@@ -67,5 +86,5 @@ export const AllTours = async (req: Request, res: Response) => {
         });
     }
 
-    res.json(result);
+    res.json(allTours);
 }

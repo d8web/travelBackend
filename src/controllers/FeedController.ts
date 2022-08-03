@@ -1,6 +1,7 @@
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
+import { unlink } from "fs/promises";
 import validator from "../helpers/validator";
 import * as FeedService from "../services/feedService";
 import * as UserRelation from "../services/userRelationService";
@@ -8,12 +9,14 @@ import * as PostService from "../services/postService";
 import * as UserService from "../services/userService";
 
 // Create new post regardless of type
-export const createPost = async (req: Request, res: Response) => {
+export const CreatePost = async (req: Request, res: Response) => {
 
     // const authorId = res.locals.user;
     const type = req.body.type;
     const body = req.body.body;
     const user = (req as CustomRequest).user;
+
+    let imageName = "";
 
     const data = {
         type,
@@ -24,12 +27,12 @@ export const createPost = async (req: Request, res: Response) => {
     switch(type) {
         case "text":
             data.body = body;
-            return res.status(201).json(await FeedService.createPost(data));
+            // return res.status(201).json(await FeedService.createPost(data));
         break;
         case "photo":
-            const imageName: string = await resizeAndReturnImage(req.file, "posts");
+            imageName = await resizeAndReturnImage(req.file, "posts");
             data.body = imageName;
-            return res.status(201).json(await FeedService.createPost(data));
+            // return res.status(201).json(await FeedService.createPost(data));
         break;
         case "video":
 
@@ -39,15 +42,15 @@ export const createPost = async (req: Request, res: Response) => {
 
             await validator(req.body, validationRule, {}, async (err, status) => {
                 if(!status) {
-                    res.status(412)
+                    return res.status(412)
                         .json({
                             success: false,
                             data: err.errors
                         });
                 } else {
                     data.body = body;
-                    const savedUser = await FeedService.createPost(data);
-                    return res.status(201).json(savedUser);
+                    // const savedUser = await FeedService.createPost(data);
+                    // return res.status(201).json(savedUser);
                 }
             }).catch(err => 
                 res.status(400).json({ error: true, message: "Ocorreu um erro!", realMessage: err })
@@ -55,10 +58,22 @@ export const createPost = async (req: Request, res: Response) => {
 
         break;
     }
+
+    try {
+        const savedUser = await FeedService.createPost(data);
+        res.status(201).json(savedUser);
+    } catch(err) {
+        await unlink("./public/media/images/posts/"+imageName);
+        res.status(400).json({
+            error: true,
+            message: "An error has occurred",
+            realError: err
+        });
+    }
 }
 
 // Get the all posts from user logged it has relations
-export const allPosts = async (req: Request, res: Response) => {
+export const AllPosts = async (req: Request, res: Response) => {
     const users: string[] = [];
     const user = (req as CustomRequest).user;
 

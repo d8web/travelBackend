@@ -14,7 +14,7 @@ routes.get(
 
 // Add new accommodation
 routes.post(
-    "/accommodation",
+    "/",
     ensureAuthenticated,
     upload.single("image"),
     AccommodationController.Create

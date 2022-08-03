@@ -2,7 +2,6 @@ import { insertImageAttractive } from "../services/imagesAttractiveService";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { createFolder } from "../helpers/createFolder";
-import { Attractive } from "../types/AttractiveType";
 import { slugify } from "../helpers/manipulateFolderName";
 import { unlink } from "fs/promises";
 
@@ -14,13 +13,13 @@ dotenv.config();
 
 // List of all attractives
 export const All = async (req: Request, res: Response) => {
-    const attractivesList: Attractive[] = await AttractiveService.getAllAttractives();
+    const attractivesList = await AttractiveService.getAllAttractives();
 
     for (let i in attractivesList) {
-        if (attractivesList[i].images.length > 0) {
-            let cover = `${process.env.BASE_URL}/media/images/attractives/${attractivesList[i].images[0].cover}`;
-            attractivesList[i].images = cover;
-        }
+        let cover = `
+            ${process.env.BASE_URL}/media/images/attractives/${attractivesList[i].cover}
+        `;
+        attractivesList[i].cover = cover;
     }
 
     return res.status(200).json(attractivesList);
@@ -170,7 +169,7 @@ export const AddImages = async (req: Request, res: Response) => {
             const fileResult = await resizeAndReturnImage(
                 files.images[i],
                 "moreimages",
-                folder
+                slugify(folder)
             );
             names.push(fileResult);
         }

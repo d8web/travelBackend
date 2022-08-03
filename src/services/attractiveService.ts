@@ -9,6 +9,7 @@ export const getAllAttractives = async () => {
             id: true,
             idPark: true,
             name: true,
+            cover: true,
             price: true,
         }
     });
@@ -50,7 +51,14 @@ export const getOneAttractive = async (idAttractive: string) => {
         select: {
             id: true,
             name: true,
-            images: true
+            images: {
+                select: {
+                    id: true,
+                    images: true,
+                    createdAt: true,
+                    updatedAt: true
+                }
+            }
         },
         where: {
             id: idAttractive

@@ -10,19 +10,19 @@ routes.post(
     "/newPost",
     ensureAuthenticated,
     upload.single("image"),
-    FeedController.createPost
+    FeedController.CreatePost
 );
 
 // Get list posts
 routes.get(
     "/posts",
     ensureAuthenticated,
-    FeedController.allPosts
+    FeedController.AllPosts
 );
 
 // Get Feed from user
 routes.get(
-    "/user/:id/feed",
+    "/user/:id",
     ensureAuthenticated,
     FeedController.UserFeed
 );

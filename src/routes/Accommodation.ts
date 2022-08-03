@@ -7,7 +7,7 @@ const routes = Router();
 
 // Get all accommodations
 routes.get(
-    "/accommodations",
+    "/",
     ensureAuthenticated,
     AccommodationController.AllAccomodations
 );
@@ -22,7 +22,7 @@ routes.post(
 
 // Get one accommodation
 routes.get(
-    "/accommodation/:id",
+    "/:id",
     ensureAuthenticated,
     AccommodationController.GetOneAcommodation
 );

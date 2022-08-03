@@ -5,19 +5,19 @@ import upload from "../helpers/multer";
 
 const routes = Router();
 
+// Get list agencies
+routes.get(
+    "/",
+    ensureAuthenticated,
+    AgencyController.AllAgencies
+);
+
 // Add new agency
 routes.post(
-    "/agency",
+    "/",
     ensureAuthenticated,
     upload.single("image"),
     AgencyController.CreateAgency
-);
-
-// Get list agencies
-routes.get(
-    "/agencies",
-    ensureAuthenticated,
-    AgencyController.AllAgencies
 );
 
 export default routes;

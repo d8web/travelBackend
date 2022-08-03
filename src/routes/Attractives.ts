@@ -7,15 +7,16 @@ const routes = Router();
 
 // List of attractives
 routes.get(
-    "/attractives",
+    "/",
     ensureAuthenticated,
     AttractiveController.All
 );
 
 // Add new attractives
 routes.post(
-    "/attractive",
+    "/",
     ensureAuthenticated,
+    upload.single("image"),
     AttractiveController.NewAttractive
 );
 
@@ -29,12 +30,20 @@ routes.post(
 
 // Add images and cover from attractive
 routes.post(
-    "/images",
+    "/images/old",
+    ensureAuthenticated,
     upload.fields([
         {name: "cover", maxCount: 1},
         {name: "images", maxCount: 4}
     ]),
     AttractiveController.AddImages
+);
+
+routes.post(
+    "/images",
+    ensureAuthenticated,
+    upload.array("images"),
+    AttractiveController.NewImages
 );
 
 export default routes;

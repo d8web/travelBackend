@@ -6,14 +6,14 @@ const routes = Router();
 
 // Like and deslike route toogle
 routes.post(
-    "/post/:id/like",
+    "/:id/like",
     ensureAuthenticated,
     PostController.Like
 );
 
 // Comment post
 routes.post(
-    "/post/:id/comment",
+    "/:id/comment",
     ensureAuthenticated,
     PostController.Comment
 );

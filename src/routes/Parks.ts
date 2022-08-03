@@ -7,14 +7,14 @@ const routes = Router();
 
 // List of parks
 routes.get(
-    "/parks",
+    "/",
     ensureAuthenticated,
     ParkController.AllParks
 );
 
 // Create new park
 routes.post(
-    "/park",
+    "/",
     ensureAuthenticated,
     upload.single("image"),
     ParkController.Create

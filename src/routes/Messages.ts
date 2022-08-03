@@ -6,7 +6,7 @@ const routes = Router();
 
 // Add new message
 routes.post(
-    "/messages",
+    "/",
     ensureAuthenticated,
     MessageController.createMessage
 );

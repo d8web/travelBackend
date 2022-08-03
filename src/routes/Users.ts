@@ -6,28 +6,28 @@ const routes = Router();
 
 // Toggle follow route
 routes.post(
-    "/user/:id/follow",
+    "/:id/follow",
     ensureAuthenticated,
     UserController.Follow
 );
 
 // Get followers from user, param userId inside at the query params
 routes.get(
-    "/user/:id/followers",
+    "/:id/followers",
     ensureAuthenticated,
     UserController.Followers
 );
 
 // Toogle a favorite user
 routes.post(
-    "/user/favorite",
+    "/favorite",
     ensureAuthenticated,
     UserController.ToogleFavorite
 );
 
 // Get a list of favorites from user
 routes.get(
-    "/user/favorites",
+    "/favorites",
     ensureAuthenticated,
     UserController.AllFavorites
 );

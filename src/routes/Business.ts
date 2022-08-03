@@ -7,21 +7,21 @@ const routes = Router();
 
 // Get all Business
 routes.get(
-    "/business",
+    "/",
     ensureAuthenticated,
     BusinessController.All
 );
 
 // Get one business
 routes.get(
-    "/business/:id",
+    "/:id",
     ensureAuthenticated,
     BusinessController.One
 );
 
 // Create business
 routes.post(
-    "/business",
+    "/",
     ensureAuthenticated,
     upload.single("image"),
     BusinessController.Create

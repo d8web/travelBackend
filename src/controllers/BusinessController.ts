@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import validator from "../helpers/validator";
-import * as BusinessService from "../services/businessService";
+import { BusinessService}  from "../services/index";
 
 export const Create = async (req: Request, res: Response) => {
 

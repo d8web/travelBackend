@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
-import * as AgencyService from "../services/agencyService";
+import { Request, Response } from "express";
+import { AgencyService } from "../services/index";
 import dotenv from "dotenv"
 dotenv.config();
 

@@ -1,13 +1,13 @@
+import { ConversationService } from "../services/index";
 import { Request, Response } from "express";
 import { getOneUserById } from "../services/userService";
-import { conversationExistsById } from "../services/conversationService";
 import { insertMessage } from "../services/messageService";
 
 export const createMessage = async (req: Request, res: Response) => {
 
     const { conversationId, sender, text } = req.body;
     const senderIdExists = await getOneUserById(sender);
-    const conversationExists = await conversationExistsById(conversationId);
+    const conversationExists = await ConversationService.conversationExistsById(conversationId);
 
     if(conversationExists && senderIdExists && text) {
         try {

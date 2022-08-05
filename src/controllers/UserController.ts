@@ -1,11 +1,12 @@
+import {
+    UserService,
+    UserRelationService,
+    AttractiveService,
+    FavoriteService
+} from "../services/index";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
 import dotenv from "dotenv";
-
-import * as UserService from "../services/userService";
-import * as UserRelation from "../services/userRelationService";
-import * as AttractiveService from "../services/attractiveService";
-import * as FavoriteService from "../services/favoriteService";
 
 dotenv.config();
 
@@ -24,13 +25,13 @@ export const Follow = async (req: Request, res: Response) => {
     if(userExists) {
         
         const result = { isFollowing: false }
-        const relation = await UserRelation.verifyRelation(loggedUserId, req.params.id);
+        const relation = await UserRelationService.verifyRelation(loggedUserId, req.params.id);
         if(relation) {
             // Delete relation [Unfollow]
-            await UserRelation.deleteRelation(relation.id);
+            await UserRelationService.deleteRelation(relation.id);
         } else {
             // Insert relation [Follow]
-            await UserRelation.insertRelation(loggedUserId, req.params.id);
+            await UserRelationService.insertRelation(loggedUserId, req.params.id);
             result.isFollowing = true;
         }
 
@@ -69,8 +70,8 @@ export const Followers = async (req: Request, res: Response) => {
             following: []
         }
 
-        const followers = await UserRelation.getFollowers(id);
-        const following = await UserRelation.getFollowing(id);
+        const followers = await UserRelationService.getFollowers(id);
+        const following = await UserRelationService.getFollowing(id);
 
         for(let i in followers) {
             const user = await UserService.getOneUserById(followers[i].userFrom);

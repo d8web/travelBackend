@@ -10,6 +10,7 @@ import * as FeedController from "./FeedController";
 import * as ParkController from "./ParkController";
 import * as PostController from "./PostController";
 import * as TourController from "./TourController";
+import * as FoodController from "./FoodController";
 
 
 export {
@@ -24,5 +25,6 @@ export {
     FeedController,
     ParkController,
     PostController,
-    TourController
+    TourController,
+    FoodController
 }

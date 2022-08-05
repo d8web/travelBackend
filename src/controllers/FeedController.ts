@@ -1,12 +1,14 @@
+import {
+    UserRelationService,
+    FeedService,
+    PostService,
+    UserService
+} from "../services/index";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
 import { unlink } from "fs/promises";
 import validator from "../helpers/validator";
-import * as FeedService from "../services/feedService";
-import * as UserRelation from "../services/userRelationService";
-import * as PostService from "../services/postService";
-import * as UserService from "../services/userService";
 
 // Create new post regardless of type
 export const CreatePost = async (req: Request, res: Response) => {
@@ -77,7 +79,7 @@ export const AllPosts = async (req: Request, res: Response) => {
     const users: string[] = [];
     const user = (req as CustomRequest).user;
 
-    const usersList = await UserRelation.getRelationsFromUser(user as string);
+    const usersList = await UserRelationService.getRelationsFromUser(user as string);
     if(usersList.length > 0) {
         for(let i in usersList) {
             users.push(usersList[i].id);

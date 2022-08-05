@@ -1,7 +1,6 @@
+import { UserService, ConversationService }  from "../services/index";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
-import * as UserService from "../services/userService";
-import * as ConversationService from "../services/conversationService";
 
 export const Create = async (req: Request, res: Response) => {
 

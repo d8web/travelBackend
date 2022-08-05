@@ -1,8 +1,10 @@
+import {
+    PostService,
+    PostLikeService,
+    PostCommentService
+} from "../services/index";
 import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
-import * as PostService from "../services/postService";
-import * as PostLikeService from "../services/postLikeService";
-import * as PostCommentService from "../services/postCommentService";
 
 // Like a post function
 export const Like = async (req: Request, res: Response) => {

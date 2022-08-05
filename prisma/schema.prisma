@@ -14,14 +14,20 @@ model User {
     email    String  @unique
     password String
 
-    birthdate  DateTime?
-    city       String?
-    work       String?
-    avatar     String?   @default("avatar.jpg")
-    cover      String?   @default("cover.jpg")
-    paid       Boolean?  @default(false) // Se pagou ou não
-    tokenPaid  String?
-    usedTheMap Int?      @default(0) // Quantas vezes usou o mapa, passou de 5 solicitar pagamento
+    birthdate          DateTime?
+    address            String?
+    contactNumber      String?
+    city               String?
+    work               String?
+    avatar             String?   @default("avatar.jpg")
+    cover              String?   @default("cover.jpg")
+    paid               Boolean?  @default(false) // Se pagou ou não
+    tokenPaid          String?
+    usedTheMap         Int?      @default(0) // Quantas vezes usou o mapa, passou de 5 solicitar pagamento
+    status             Boolean   @default(false)
+    whereAreYouStaying String? // Onde está hospedado, pousada, hotel, hostel, airbnb
+    roomNumber         Int? // Number of room where you're staying
+    deliveryNote       String?   @db.Text // Observação da entrega, ex: Vou estar esperando em tal lugar(opcional)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -37,6 +43,8 @@ model User {
     appointments       UserAppointment[]
     ServiceReview      ServiceReview[]
     ServiceTestimonial ServiceTestimonial[]
+    FoodFeedback       FoodFeedback[]
+    Order              Order[]
 
     @@map("users")
 }
@@ -46,7 +54,7 @@ model UserAppointment {
     idUser              String // id user to appointment agency
     idAgency            String // ID agency
     idService           String // Id service
-    numberOfPeoples     String // Number of peoples
+    numberOfPeoples     Int // Number of peoples
     appointmentDatetime String // Datetime from appointment to user from agency
 
     createdAt DateTime @default(now())
@@ -76,27 +84,26 @@ model Attractives {
     type                String?  @default("Cachoeira")
     name                String
     title               String
-    description         String?
+    description         String?  @db.Text
     cover               String?  @default("cover.jpg")
     price               Float
-    latitude            String
-    longitude           String
+    latitude            String   @db.VarChar(50)
+    longitude           String   @db.VarChar(50)
     location            String
-    vehicleRecomended   Boolean? @default(false)
+    vehicleRecomended   Boolean? @default(false) // Vehicle normal or offRoad
     polluted            Boolean? @default(false)
     guide               Boolean? @default(false)
     propertyPrivate     Boolean? @default(true)
     popularLocation     Boolean? @default(false)
-    rate                Float?   @default(4)
-    walkingLevel        String?  @default("Fácil/Médio")
+    walkingLevel        String?  @default("Fácil/Médio") @db.VarChar(100)
     averageWalkingTime  String?  @default("Entre 5 a 10 minutos") // Tempo médio de caminhada até o atrativo
     slipperyStones      Boolean? @default(true)
-    distanceOfCarrancas String
+    distanceOfCarrancas String   @db.VarChar(50)
     placeForChildren    Boolean? @default(true)
-    averageDepth        String
-    averageHeightOfFall String
+    averageDepth        String   @db.VarChar(100)
+    averageHeightOfFall String   @db.VarChar(100)
     bestPhotos          Boolean? @default(true)
-    observations        String?
+    observations        String?  @db.Text
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -136,7 +143,7 @@ model UserRelation {
 
 model Post {
     id   String @id @default(uuid())
-    type String
+    type String @db.VarChar(20)
     body String @db.Text
 
     createdAt DateTime @default(now())
@@ -198,7 +205,7 @@ model AttractiveReview {
     idAttractive String
     idUser       String
     rate         Float
-    body         String?
+    body         String? @db.Text
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -214,17 +221,17 @@ model Park {
     name              String
     image             String?  @default("cover.jpg")
     price             Float
-    phone             String?
-    whatsapp          String?
-    wifi              Boolean
-    bath              Boolean
-    restaurant        Boolean
-    parking           Boolean
-    private           Boolean
-    hotel             Boolean
+    phone             String?  @db.VarChar(50)
+    whatsapp          String?  @db.VarChar(50)
+    wifi              Boolean? @default(false)
+    bath              Boolean? @default(false)
+    restaurant        Boolean? @default(false)
+    parking           Boolean? @default(true)
+    private           Boolean? @default(true)
+    hotel             Boolean? @default(false)
     mainWaterfall     String?
-    latitude          String
-    longitude         String
+    latitude          String   @db.VarChar(50)
+    longitude         String   @db.VarChar(50)
     facebook          String?
     instagram         String?
     othersSocialMedia String[] @default([])
@@ -258,8 +265,8 @@ model Agency {
     type              String?  @default("agency")
     image             String?  @default("cover.jpg")
     website           String?
-    phone             String?
-    whatsapp          String?
+    phone             String?  @db.VarChar(50)
+    whatsapp          String?  @db.VarChar(50)
     facebook          String?
     instagram         String?
     othersSocialMedia String[] @default([])
@@ -278,11 +285,11 @@ model Agency {
 }
 
 model Service {
-    id       String   @id @default(uuid())
+    id       String @id @default(uuid())
     idAgency String // Idenfifier agency
     name     String // Name service of agency
-    price    String // Agency Pricing Service
-    tours    String[] // Tours included that service
+    price    Float // Agency Pricing Service
+    idTour   String // Tours included that service
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -302,6 +309,8 @@ model ServiceAvailability {
     weekday           Int // Day week of job the service
     numberOfVacancies Int // Number of vacancies ex 10, if two peoples reserved some more 8 vacancies
     hours             String @db.Text // Hours of days of job the service
+    maxPeople         Int?
+    minPeople         Int?   @default(0)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -335,7 +344,6 @@ model ServiceTestimonial {
     idAgency  String // Idenfifier agency
     idService String
     idUser    String
-    name      String // Name client tertimonial
     rate      Float // Note drom service
     body      String // The Body testimonial
 
@@ -365,6 +373,7 @@ model ImageAgency {
 model Tour {
     id                    String   @id @default(uuid())
     idAgency              String
+    vehicleTourId         String?
     attractives           String[]
     name                  String
     meansOfLocomotion     String
@@ -372,23 +381,41 @@ model Tour {
     background            String?  @default("cover.jpg")
     video                 String?  @default("cover.jpg")
     groups                Boolean
-    maxPeople             Int?
-    minPeople             Int?     @default(0)
     pricePerPeople        Float
-    duration              String
+    duration              String?  @db.VarChar(20)
     specialPrice          Float?
-    descriptionTour       String?
-    whatsToTake           String?
+    descriptionTour       String?  @db.Text
+    whatsToTake           String?  @db.Text
     hasWalk               Boolean? @default(true)
-    observations          String?
+    observations          String?  @db.Text
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    agency Agency       @relation(fields: [idAgency], references: [id])
-    images ImagesTour[]
+    agency      Agency       @relation(fields: [idAgency], references: [id])
+    images      ImagesTour[]
+    VehicleTour VehicleTour? @relation(fields: [vehicleTourId], references: [id])
 
     @@map("tours")
+}
+
+model VehicleTour {
+    id       String   @id @default(uuid())
+    idTour   String
+    name     String?
+    year     Int?
+    brand    String?
+    color    String?  @db.VarChar(50)
+    capacity String?  @db.VarChar(20)
+    cover    String?  @default("cover.jpg")
+    images   String[] @default([])
+    offRoad  Boolean? @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Tour      Tour[]
+
+    @@map("vehicle_tours")
 }
 
 model ImagesTour {
@@ -410,6 +437,7 @@ model Accommodation {
     image             String?  @default("cover.jpg")
     phone             String?
     whatsapp          String?
+    acceptPets        Boolean? @default(false)
     website           String?
     facebook          String?
     instagram         String?
@@ -498,33 +526,148 @@ model ImageBusiness {
     @@map("images_business")
 }
 
+// Reference DB https://www.inettutor.com/diagrams/restaurant-food-delivery-system-free-database-design-tutorial/
 model Food {
-    id                String   @id @default(uuid())
-    type              String
-    name              String
-    image             String?  @default("cover.jpg")
-    phone             String?
-    whatsapp          String?
-    hourOpen          String?
-    hourClosed        String?
-    delivery          Boolean? @default(true) // Has delivery
-    menu              String[] @default([])
-    website           String?
-    facebook          String?
-    instagram         String?
-    othersSocialMedia String[] @default([])
-    acceptReservation Boolean? @default(false) // Accept reservation [Aceita reserva]
-    acceptOrders      Boolean? @default(false) // Accept orders [Aceita encomendas]
-    reference         String?
-    bestfood          Boolean?
-    observations      String?
+    id                 String   @id @default(uuid())
+    type               String   @db.VarChar(50) // Restaurand, bakery, pizza or burger
+    typeFood           String[] @default(["all"]) // Vegan, all, mineira, vegetarian
+    name               String
+    ownerName          String // The name of the restaurant’s owner, [Nome do dono]
+    image              String?  @default("cover.jpg") // logo from restaurant
+    phone              String?  @db.VarChar(50)
+    whatsapp           String?  @db.VarChar(50)
+    hourOpen           String?  @db.VarChar(10)
+    hourClosed         String?  @db.VarChar(10)
+    delivery           Boolean? @default(true) // Has delivery
+    menu               String[] @default([])
+    website            String?
+    facebook           String?
+    instagram          String?
+    othersSocialMedia  String[] @default([])
+    acceptReservation  Boolean? @default(false) // Accept reservation [Aceita reserva]
+    acceptOrders       Boolean? @default(false) // Accept orders [Aceita encomendas]
+    reference          String?
+    mainCourse         String? // [Prato principal]
+    maxOrderAllowed    Int // O pedido máximo permitido
+    commissionPercent  Int //  ​​A porcentagem de comissão
+    driversRate        Float // O valor da taxa do motorista
+    latitude           String?  @db.VarChar(50)
+    longitude          String?  @db.VarChar(50)
+    acceptPets         Boolean? @default(false)
+    bestFood           Boolean? @default(false)
+    registrationStatus String?  @default("pendente") @db.VarChar(100) // pending, approved, disapproved
+    observations       String?  @db.Text
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    ImageFood ImageFood[]
+    ImagesFood    ImageFood[]
+    FoodFeedbacks FoodFeedback[]
+    Orders        Order[]
+    AdminFood     AdminFood[]
+    FoodList      FoodList[]
 
     @@map("foods")
+}
+
+model FoodList {
+    id              String   @id @default(uuid())
+    foodId          String?
+    foodName        String
+    pricePerServing Float
+    image           String   @default("cover.jpg")
+    description     String   @db.Text
+    status          Boolean? @default(true)
+
+    Order Order[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Food      Food?    @relation(fields: [foodId], references: [id])
+
+    @@map("food_list")
+}
+
+model DeliveryDriver {
+    id             String  @id @default(uuid())
+    restaurantId   String
+    nameCompleted  String
+    address        String
+    contactNumber  String  @db.VarChar(50)
+    email          String
+    profilePicture String? @default("cover.jpg")
+    driversLicense String
+    username       String
+    password       String
+    accountStatus  Boolean // Active, inactive
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Order     Order[]
+
+    @@map("delivery_drivers")
+}
+
+model FoodFeedback {
+    id          String   @id @default(uuid())
+    title       String
+    description String   @db.Text
+    date        DateTime @default(now())
+    customerId  String
+    foodId      String
+    status      Int?     @default(1) // 2 = fechado, 1 = aberto, 3 = resolvido
+
+    food Food @relation(fields: [foodId], references: [id])
+    user User @relation(fields: [customerId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("food_feedbacks")
+}
+
+model Order {
+    id             String   @id @default(uuid())
+    orderCode      String // Código único para o pedido
+    customerId     String // Esta é uma chave estrangeira que aponta para o cliente
+    orderDateTime  DateTime // A data e hora em que o pedido foi feito
+    foodId         String // Esta é uma chave estrangeira que aponta para o alimento
+    restaurantId   String // Esta é uma chave estrangeira que aponta para o restaurante
+    amount         Float // O valor a ser pago pelo pedido
+    deliveryCharge Float // O valor da taxa de entrega
+    totalAmount    Float // O valor total do pedido
+    driverId       String? // Esta é uma chave estrangeira que aponta para o motorista de entrega
+    status         Int?     @default(1) // pendente, cancelado, entregue
+    processedBy    Int // O usuário ou administrador que processou a transação
+
+    driver     DeliveryDriver? @relation(fields: [deliveryDriverId], references: [id])
+    user       User            @relation(fields: [customerId], references: [id])
+    restaurant Food            @relation(fields: [restaurantId], references: [id])
+    food       FoodList        @relation(fields: [foodId], references: [id])
+
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+    deliveryDriverId String?
+
+    @@map("orders")
+}
+
+model AdminFood {
+    id              String @id @default(uuid())
+    completeName    String
+    emailAddress    String
+    completeAddress String
+    username        String
+    password        String
+    status          Int    @default(1)
+    idFood          String
+
+    food Food @relation(fields: [idFood], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("admin_food")
 }
 
 model ImageFood {

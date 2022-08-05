@@ -15,6 +15,7 @@ export const create = async (data: AccommodationType) => {
             phone: data.phone,
             whatsapp: data.whatsapp,
             website: data.website,
+            acceptPets: data.acceptPets,
             booking: data.booking,
             bestaccommodation: data.bestaccommodation
         }

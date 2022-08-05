@@ -12,6 +12,7 @@ import UserRoutes from "./Users";
 import ToursRoutes from "./Tours";
 import AuthRoutes from "./Auth";
 import FeedRoutes from "./Feed";
+import FoodRoutes from "./Food";
 
 export default {
     AccommodationRoutes,
@@ -27,5 +28,6 @@ export default {
     ToursRoutes,
     UserRoutes,
     AuthRoutes,
-    FeedRoutes
+    FeedRoutes,
+    FoodRoutes
 }

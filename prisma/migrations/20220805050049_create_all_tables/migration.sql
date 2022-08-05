@@ -6,6 +6,8 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "birthdate" TIMESTAMP(3),
+    "address" TEXT,
+    "contactNumber" TEXT,
     "city" TEXT,
     "work" TEXT,
     "avatar" TEXT DEFAULT 'avatar.jpg',
@@ -13,6 +15,10 @@ CREATE TABLE "users" (
     "paid" BOOLEAN DEFAULT false,
     "tokenPaid" TEXT,
     "usedTheMap" INTEGER DEFAULT 0,
+    "status" BOOLEAN NOT NULL DEFAULT false,
+    "whereAreYouStaying" TEXT,
+    "roomNumber" INTEGER,
+    "deliveryNote" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -25,7 +31,7 @@ CREATE TABLE "user_appointments" (
     "idUser" TEXT NOT NULL,
     "idAgency" TEXT NOT NULL,
     "idService" TEXT NOT NULL,
-    "numberOfPeoples" TEXT NOT NULL,
+    "numberOfPeoples" INTEGER NOT NULL,
     "appointmentDatetime" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -54,22 +60,21 @@ CREATE TABLE "attractives" (
     "description" TEXT,
     "cover" TEXT DEFAULT 'cover.jpg',
     "price" DOUBLE PRECISION NOT NULL,
-    "latitude" TEXT NOT NULL,
-    "longitude" TEXT NOT NULL,
+    "latitude" VARCHAR(50) NOT NULL,
+    "longitude" VARCHAR(50) NOT NULL,
     "location" TEXT NOT NULL,
     "vehicleRecomended" BOOLEAN DEFAULT false,
     "polluted" BOOLEAN DEFAULT false,
     "guide" BOOLEAN DEFAULT false,
     "propertyPrivate" BOOLEAN DEFAULT true,
     "popularLocation" BOOLEAN DEFAULT false,
-    "rate" DOUBLE PRECISION DEFAULT 4,
-    "walkingLevel" TEXT DEFAULT 'Fácil/Médio',
+    "walkingLevel" VARCHAR(100) DEFAULT 'Fácil/Médio',
     "averageWalkingTime" TEXT DEFAULT 'Entre 5 a 10 minutos',
     "slipperyStones" BOOLEAN DEFAULT true,
-    "distanceOfCarrancas" TEXT NOT NULL,
+    "distanceOfCarrancas" VARCHAR(50) NOT NULL,
     "placeForChildren" BOOLEAN DEFAULT true,
-    "averageDepth" TEXT NOT NULL,
-    "averageHeightOfFall" TEXT NOT NULL,
+    "averageDepth" VARCHAR(100) NOT NULL,
+    "averageHeightOfFall" VARCHAR(100) NOT NULL,
     "bestPhotos" BOOLEAN DEFAULT true,
     "observations" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -103,7 +108,7 @@ CREATE TABLE "user_relations" (
 -- CreateTable
 CREATE TABLE "posts" (
     "id" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
+    "type" VARCHAR(20) NOT NULL,
     "body" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -165,17 +170,17 @@ CREATE TABLE "parks" (
     "name" TEXT NOT NULL,
     "image" TEXT DEFAULT 'cover.jpg',
     "price" DOUBLE PRECISION NOT NULL,
-    "phone" TEXT,
-    "whatsapp" TEXT,
-    "wifi" BOOLEAN NOT NULL,
-    "bath" BOOLEAN NOT NULL,
-    "restaurant" BOOLEAN NOT NULL,
-    "parking" BOOLEAN NOT NULL,
-    "private" BOOLEAN NOT NULL,
-    "hotel" BOOLEAN NOT NULL,
+    "phone" VARCHAR(50),
+    "whatsapp" VARCHAR(50),
+    "wifi" BOOLEAN DEFAULT false,
+    "bath" BOOLEAN DEFAULT false,
+    "restaurant" BOOLEAN DEFAULT false,
+    "parking" BOOLEAN DEFAULT true,
+    "private" BOOLEAN DEFAULT true,
+    "hotel" BOOLEAN DEFAULT false,
     "mainWaterfall" TEXT,
-    "latitude" TEXT NOT NULL,
-    "longitude" TEXT NOT NULL,
+    "latitude" VARCHAR(50) NOT NULL,
+    "longitude" VARCHAR(50) NOT NULL,
     "facebook" TEXT,
     "instagram" TEXT,
     "othersSocialMedia" TEXT[] DEFAULT ARRAY[]::TEXT[],
@@ -204,8 +209,8 @@ CREATE TABLE "agencies" (
     "type" TEXT DEFAULT 'agency',
     "image" TEXT DEFAULT 'cover.jpg',
     "website" TEXT,
-    "phone" TEXT,
-    "whatsapp" TEXT,
+    "phone" VARCHAR(50),
+    "whatsapp" VARCHAR(50),
     "facebook" TEXT,
     "instagram" TEXT,
     "othersSocialMedia" TEXT[] DEFAULT ARRAY[]::TEXT[],
@@ -220,8 +225,8 @@ CREATE TABLE "services" (
     "id" TEXT NOT NULL,
     "idAgency" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
-    "tours" TEXT[],
+    "price" DOUBLE PRECISION NOT NULL,
+    "idTour" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -235,6 +240,8 @@ CREATE TABLE "service_availability" (
     "weekday" INTEGER NOT NULL,
     "numberOfVacancies" INTEGER NOT NULL,
     "hours" TEXT NOT NULL,
+    "maxPeople" INTEGER,
+    "minPeople" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "servicesId" TEXT,
@@ -261,7 +268,6 @@ CREATE TABLE "service_testimonials" (
     "idAgency" TEXT NOT NULL,
     "idService" TEXT NOT NULL,
     "idUser" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
     "rate" DOUBLE PRECISION NOT NULL,
     "body" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -285,6 +291,7 @@ CREATE TABLE "images_agencies" (
 CREATE TABLE "tours" (
     "id" TEXT NOT NULL,
     "idAgency" TEXT NOT NULL,
+    "vehicleTourId" TEXT,
     "attractives" TEXT[],
     "name" TEXT NOT NULL,
     "meansOfLocomotion" TEXT NOT NULL,
@@ -292,10 +299,8 @@ CREATE TABLE "tours" (
     "background" TEXT DEFAULT 'cover.jpg',
     "video" TEXT DEFAULT 'cover.jpg',
     "groups" BOOLEAN NOT NULL,
-    "maxPeople" INTEGER,
-    "minPeople" INTEGER DEFAULT 0,
     "pricePerPeople" DOUBLE PRECISION NOT NULL,
-    "duration" TEXT NOT NULL,
+    "duration" VARCHAR(20),
     "specialPrice" DOUBLE PRECISION,
     "descriptionTour" TEXT,
     "whatsToTake" TEXT,
@@ -305,6 +310,24 @@ CREATE TABLE "tours" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "tours_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "vehicle_tours" (
+    "id" TEXT NOT NULL,
+    "idTour" TEXT NOT NULL,
+    "name" TEXT,
+    "year" INTEGER,
+    "brand" TEXT,
+    "color" VARCHAR(50),
+    "capacity" VARCHAR(20),
+    "cover" TEXT DEFAULT 'cover.jpg',
+    "images" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "offRoad" BOOLEAN DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "vehicle_tours_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -325,6 +348,7 @@ CREATE TABLE "accommodations" (
     "image" TEXT DEFAULT 'cover.jpg',
     "phone" TEXT,
     "whatsapp" TEXT,
+    "acceptPets" BOOLEAN DEFAULT false,
     "website" TEXT,
     "facebook" TEXT,
     "instagram" TEXT,
@@ -403,13 +427,15 @@ CREATE TABLE "images_business" (
 -- CreateTable
 CREATE TABLE "foods" (
     "id" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
+    "type" VARCHAR(50) NOT NULL,
+    "typeFood" TEXT[] DEFAULT ARRAY['all']::TEXT[],
     "name" TEXT NOT NULL,
+    "ownerName" TEXT NOT NULL,
     "image" TEXT DEFAULT 'cover.jpg',
-    "phone" TEXT,
-    "whatsapp" TEXT,
-    "hourOpen" TEXT,
-    "hourClosed" TEXT,
+    "phone" VARCHAR(50),
+    "whatsapp" VARCHAR(50),
+    "hourOpen" VARCHAR(10),
+    "hourClosed" VARCHAR(10),
     "delivery" BOOLEAN DEFAULT true,
     "menu" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "website" TEXT,
@@ -419,12 +445,106 @@ CREATE TABLE "foods" (
     "acceptReservation" BOOLEAN DEFAULT false,
     "acceptOrders" BOOLEAN DEFAULT false,
     "reference" TEXT,
-    "bestfood" BOOLEAN,
+    "mainCourse" TEXT,
+    "maxOrderAllowed" INTEGER NOT NULL,
+    "commissionPercent" INTEGER NOT NULL,
+    "driversRate" DOUBLE PRECISION NOT NULL,
+    "latitude" VARCHAR(50),
+    "longitude" VARCHAR(50),
+    "acceptPets" BOOLEAN DEFAULT false,
+    "bestFood" BOOLEAN DEFAULT false,
+    "registrationStatus" VARCHAR(100) DEFAULT 'pendente',
     "observations" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "foods_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "food_list" (
+    "id" TEXT NOT NULL,
+    "foodId" TEXT,
+    "foodName" TEXT NOT NULL,
+    "pricePerServing" DOUBLE PRECISION NOT NULL,
+    "image" TEXT NOT NULL DEFAULT 'cover.jpg',
+    "description" TEXT NOT NULL,
+    "status" BOOLEAN DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "food_list_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "delivery_drivers" (
+    "id" TEXT NOT NULL,
+    "restaurantId" TEXT NOT NULL,
+    "nameCompleted" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "contactNumber" VARCHAR(50) NOT NULL,
+    "email" TEXT NOT NULL,
+    "profilePicture" TEXT DEFAULT 'cover.jpg',
+    "driversLicense" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "accountStatus" BOOLEAN NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "delivery_drivers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "food_feedbacks" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "customerId" TEXT NOT NULL,
+    "foodId" TEXT NOT NULL,
+    "status" INTEGER DEFAULT 1,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "food_feedbacks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "orders" (
+    "id" TEXT NOT NULL,
+    "orderCode" TEXT NOT NULL,
+    "customerId" TEXT NOT NULL,
+    "orderDateTime" TIMESTAMP(3) NOT NULL,
+    "foodId" TEXT NOT NULL,
+    "restaurantId" TEXT NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "deliveryCharge" DOUBLE PRECISION NOT NULL,
+    "totalAmount" DOUBLE PRECISION NOT NULL,
+    "driverId" TEXT,
+    "status" INTEGER DEFAULT 1,
+    "processedBy" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deliveryDriverId" TEXT,
+
+    CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "admin_food" (
+    "id" TEXT NOT NULL,
+    "completeName" TEXT NOT NULL,
+    "emailAddress" TEXT NOT NULL,
+    "completeAddress" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "status" INTEGER NOT NULL DEFAULT 1,
+    "idFood" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "admin_food_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -520,6 +640,9 @@ ALTER TABLE "images_agencies" ADD CONSTRAINT "images_agencies_idAgency_fkey" FOR
 ALTER TABLE "tours" ADD CONSTRAINT "tours_idAgency_fkey" FOREIGN KEY ("idAgency") REFERENCES "agencies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "tours" ADD CONSTRAINT "tours_vehicleTourId_fkey" FOREIGN KEY ("vehicleTourId") REFERENCES "vehicle_tours"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "images_tours" ADD CONSTRAINT "images_tours_idTour_fkey" FOREIGN KEY ("idTour") REFERENCES "tours"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -530,6 +653,30 @@ ALTER TABLE "messages" ADD CONSTRAINT "messages_conversationId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "images_business" ADD CONSTRAINT "images_business_idBusiness_fkey" FOREIGN KEY ("idBusiness") REFERENCES "business"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "food_list" ADD CONSTRAINT "food_list_foodId_fkey" FOREIGN KEY ("foodId") REFERENCES "foods"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "food_feedbacks" ADD CONSTRAINT "food_feedbacks_foodId_fkey" FOREIGN KEY ("foodId") REFERENCES "foods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "food_feedbacks" ADD CONSTRAINT "food_feedbacks_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_deliveryDriverId_fkey" FOREIGN KEY ("deliveryDriverId") REFERENCES "delivery_drivers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_restaurantId_fkey" FOREIGN KEY ("restaurantId") REFERENCES "foods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_foodId_fkey" FOREIGN KEY ("foodId") REFERENCES "food_list"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "admin_food" ADD CONSTRAINT "admin_food_idFood_fkey" FOREIGN KEY ("idFood") REFERENCES "foods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "image_foods" ADD CONSTRAINT "image_foods_idFood_fkey" FOREIGN KEY ("idFood") REFERENCES "foods"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,7 +1,7 @@
+import { AccommodationService } from "../services/index";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import validator from "../helpers/validator";
-import * as AccommodationService from "../services/accommodationService";
 
 export const AllAccomodations = async (req: Request, res: Response) => {
     try {
@@ -71,7 +71,8 @@ export const Create = async (req: Request, res: Response) => {
                 whatsapp,
                 website,
                 booking,
-                bestaccommodation
+                bestaccommodation,
+                acceptPets
             } = req.body;
         
             const bestaccommodationFinally = bestaccommodation === "true";
@@ -89,7 +90,8 @@ export const Create = async (req: Request, res: Response) => {
                     whatsapp,
                     website,
                     booking,
-                    bestaccommodation: bestaccommodationFinally
+                    bestaccommodation: bestaccommodationFinally,
+                    acceptPets: acceptPets === "true"
                 });
 
                 res.status(201).json(savedAccommodation);

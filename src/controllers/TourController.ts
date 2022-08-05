@@ -1,8 +1,8 @@
 import { TourService, AgencyService } from "../services/index";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
+import { AttractiveService } from "../services/index";
 import { Request, Response } from "express";
 import { unlink } from "fs/promises";
-import * as AttractiveService from "../services/attractiveService";
 
 // Create a new tour
 export const Create = async (req: Request, res: Response) => {

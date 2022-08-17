@@ -180,7 +180,7 @@ export const AddImages = async (req: Request, res: Response) => {
         } catch (err) {
             res.status(400).json({
                 error: true,
-                message: "Ocorreu um erro!",
+                message: "An error has occurred",
                 realMessage: err
             });
         }

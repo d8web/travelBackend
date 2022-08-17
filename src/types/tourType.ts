@@ -8,8 +8,6 @@ export interface TourType {
     background?: string;
     video?: string;
     groups: boolean;
-    maxPeople?: number;
-    minPeople?: number;
     duration: string;
     pricePerPeople: number;
     specialPrice: number;

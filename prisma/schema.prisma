@@ -289,7 +289,8 @@ model Service {
     idAgency String // Idenfifier agency
     name     String // Name service of agency
     price    Float // Agency Pricing Service
-    idTour   String // Tours included that service
+    tours    String[] // Tours included that service
+    duration String @db.VarChar(50)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -373,7 +374,7 @@ model ImageAgency {
 model Tour {
     id                    String   @id @default(uuid())
     idAgency              String
-    vehicleTourId         String?
+    vehicle               String?
     attractives           String[]
     name                  String
     meansOfLocomotion     String
@@ -394,28 +395,8 @@ model Tour {
 
     agency      Agency       @relation(fields: [idAgency], references: [id])
     images      ImagesTour[]
-    VehicleTour VehicleTour? @relation(fields: [vehicleTourId], references: [id])
 
     @@map("tours")
-}
-
-model VehicleTour {
-    id       String   @id @default(uuid())
-    idTour   String
-    name     String?
-    year     Int?
-    brand    String?
-    color    String?  @db.VarChar(50)
-    capacity String?  @db.VarChar(20)
-    cover    String?  @default("cover.jpg")
-    images   String[] @default([])
-    offRoad  Boolean? @default(false)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    Tour      Tour[]
-
-    @@map("vehicle_tours")
 }
 
 model ImagesTour {
@@ -551,8 +532,8 @@ model Food {
     maxOrderAllowed    Int // O pedido máximo permitido
     commissionPercent  Int //  ​​A porcentagem de comissão
     driversRate        Float // O valor da taxa do motorista
-    latitude           String?  @db.VarChar(50)
-    longitude          String?  @db.VarChar(50)
+    latitude           String?  @db.VarChar(100)
+    longitude          String?  @db.VarChar(100)
     acceptPets         Boolean? @default(false)
     bestFood           Boolean? @default(false)
     registrationStatus String?  @default("pendente") @db.VarChar(100) // pending, approved, disapproved
@@ -574,6 +555,7 @@ model FoodList {
     id              String   @id @default(uuid())
     foodId          String?
     foodName        String
+    deliveryTime    String // Tempo de duração de preparo
     pricePerServing Float
     image           String   @default("cover.jpg")
     description     String   @db.Text

@@ -226,7 +226,8 @@ CREATE TABLE "services" (
     "idAgency" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
-    "idTour" TEXT NOT NULL,
+    "tours" TEXT[],
+    "duration" VARCHAR(50) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -291,7 +292,7 @@ CREATE TABLE "images_agencies" (
 CREATE TABLE "tours" (
     "id" TEXT NOT NULL,
     "idAgency" TEXT NOT NULL,
-    "vehicleTourId" TEXT,
+    "vehicle" TEXT,
     "attractives" TEXT[],
     "name" TEXT NOT NULL,
     "meansOfLocomotion" TEXT NOT NULL,
@@ -310,24 +311,6 @@ CREATE TABLE "tours" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "tours_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "vehicle_tours" (
-    "id" TEXT NOT NULL,
-    "idTour" TEXT NOT NULL,
-    "name" TEXT,
-    "year" INTEGER,
-    "brand" TEXT,
-    "color" VARCHAR(50),
-    "capacity" VARCHAR(20),
-    "cover" TEXT DEFAULT 'cover.jpg',
-    "images" TEXT[] DEFAULT ARRAY[]::TEXT[],
-    "offRoad" BOOLEAN DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "vehicle_tours_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -449,8 +432,8 @@ CREATE TABLE "foods" (
     "maxOrderAllowed" INTEGER NOT NULL,
     "commissionPercent" INTEGER NOT NULL,
     "driversRate" DOUBLE PRECISION NOT NULL,
-    "latitude" VARCHAR(50),
-    "longitude" VARCHAR(50),
+    "latitude" VARCHAR(100),
+    "longitude" VARCHAR(100),
     "acceptPets" BOOLEAN DEFAULT false,
     "bestFood" BOOLEAN DEFAULT false,
     "registrationStatus" VARCHAR(100) DEFAULT 'pendente',
@@ -466,6 +449,7 @@ CREATE TABLE "food_list" (
     "id" TEXT NOT NULL,
     "foodId" TEXT,
     "foodName" TEXT NOT NULL,
+    "deliveryTime" TEXT NOT NULL,
     "pricePerServing" DOUBLE PRECISION NOT NULL,
     "image" TEXT NOT NULL DEFAULT 'cover.jpg',
     "description" TEXT NOT NULL,
@@ -638,9 +622,6 @@ ALTER TABLE "images_agencies" ADD CONSTRAINT "images_agencies_idAgency_fkey" FOR
 
 -- AddForeignKey
 ALTER TABLE "tours" ADD CONSTRAINT "tours_idAgency_fkey" FOREIGN KEY ("idAgency") REFERENCES "agencies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "tours" ADD CONSTRAINT "tours_vehicleTourId_fkey" FOREIGN KEY ("vehicleTourId") REFERENCES "vehicle_tours"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "images_tours" ADD CONSTRAINT "images_tours_idTour_fkey" FOREIGN KEY ("idTour") REFERENCES "tours"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

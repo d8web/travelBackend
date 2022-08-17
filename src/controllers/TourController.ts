@@ -43,8 +43,6 @@ export const Create = async (req: Request, res: Response) => {
                 guidesOnVehicleClient,
                 video,
                 groups,
-                maxPeople,
-                minPeople,
                 duration,
                 pricePerPeople,
                 specialPrice,
@@ -81,7 +79,6 @@ export const AllTours = async (req: Request, res: Response) => {
 
         result.push({
             name: allTours[i].name,
-            maxPeople: allTours[i].maxPeople,
             attractivesIncludes: attractives
         });
     }

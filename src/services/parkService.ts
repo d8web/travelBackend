@@ -7,6 +7,7 @@ export const getAllParks = async () => {
     return prisma.park.findMany({
         select: {
             id: true,
+            name: true,
             image: true,
             price: true,
             // attractiveList: true

@@ -9,6 +9,7 @@ import * as BusinessService from "./businessService";
 import * as FavoriteService from "./favoriteService";
 import * as PostLikeService from "./postLikeService";
 import * as MessageService from "./messageService";
+import * as ServiceService from "./serviceService";
 import * as AgencyService from "./agencyService";
 import * as AuthService from "./authService";
 import * as FeedService from "./feedService";
@@ -28,6 +29,7 @@ export {
     BusinessService,
     FavoriteService,
     PostLikeService,
+    ServiceService,
     MessageService,
     AgencyService,
     AuthService,

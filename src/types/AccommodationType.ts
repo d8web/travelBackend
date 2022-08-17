@@ -3,8 +3,11 @@ export interface AccommodationType {
     image?: string;
     phone?: string;
     whatsapp?: string;
-    website?: string;
-    booking?: string;
     acceptPets?: boolean;
+    website?: string;
+    facebook?: string;
+    instagram?: string;
+    booking?: string;
+    othersSocialMedia?: boolean;
     bestaccommodation?: boolean;
 }

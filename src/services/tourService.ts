@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { TourType } from "../types/tourType";
+import { TourType } from "../types/TourType";
 
 const prisma = new PrismaClient();
 
@@ -28,6 +28,15 @@ export const insertTour = async (tourObject: TourType, image?: string) => {
 export const allTours = async () => {
     return await prisma.tour.findMany({
         select: {
+            id: true,
+            idAgency: true,
+            background: true,
+            duration: true,
+            groups: true,
+            images: true,
+            vehicle: true,
+            video: true,
+            guidesOnVehicleClient: true,
             name: true,
             attractives: true
         }

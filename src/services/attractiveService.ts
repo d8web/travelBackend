@@ -8,9 +8,10 @@ export const getAllAttractives = async () => {
         select: {
             id: true,
             idPark: true,
+            type: true,
+            title: true,
             name: true,
-            cover: true,
-            price: true,
+            cover: true
         }
     });
 }
@@ -24,10 +25,8 @@ export const createAttractive = async (attractive: Attractive, image: string) =>
             title: attractive.title,
             cover: image,
             description: attractive.description,
-            price: attractive.price,
             latitude: attractive.latitude,
             longitude: attractive.longitude,
-            location: attractive.location,
             vehicleRecomended: attractive.vehicleRecomended,
             polluted: attractive.polluted,
             guide: attractive.guide,
@@ -71,7 +70,6 @@ export const getAttractivesFromTour = async (ids: string[]) => {
         select: {
             id: true,
             name: true,
-            price: true,
         },
         where: {
             id: {

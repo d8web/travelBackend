@@ -6,10 +6,8 @@ export interface Attractive {
     cover?: string;
     title?: string;
     description?: string;
-    price?: number;
     latitude?: string;
     longitude?: string;
-    location?: string;
     vehicleRecomended?: boolean;
     polluted?: boolean;
     guide?: boolean;

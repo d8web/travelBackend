@@ -1,6 +1,8 @@
-export interface FoodType {
+export type FoodType = {
     type: string;
+    typeFood?: string[];
     name: string;
+    ownerName: string;
     image?: string;
     phone?: string;
     whatsapp?: string;
@@ -14,8 +16,15 @@ export interface FoodType {
     othersSocialMedia?: string[];
     acceptReservation?: boolean;
     acceptOrders?: boolean;
-    acceptPets?: boolean;
     reference?: string;
-    bestfood?: boolean;
+    mainCourse?: string;
+    maxOrderAllowed?: number;
+    commissionPercent: number;
+    driversRate: number;
+    latitude?: string;
+    longitude?: string;
+    acceptPets?: boolean;
+    bestFood?: boolean;
+    registrationStatus?: string;
     observations?: string;
 }

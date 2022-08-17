@@ -86,10 +86,8 @@ model Attractives {
     title               String
     description         String?  @db.Text
     cover               String?  @default("cover.jpg")
-    price               Float
     latitude            String   @db.VarChar(50)
     longitude           String   @db.VarChar(50)
-    location            String
     vehicleRecomended   Boolean? @default(false) // Vehicle normal or offRoad
     polluted            Boolean? @default(false)
     guide               Boolean? @default(false)

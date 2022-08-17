@@ -16,9 +16,7 @@ export const All = async (req: Request, res: Response) => {
     const attractivesList = await AttractiveService.getAllAttractives();
 
     for (let i in attractivesList) {
-        let cover = `
-            ${process.env.BASE_URL}/media/images/attractives/${attractivesList[i].cover}
-        `;
+        let cover = `${process.env.BASE_URL}/media/images/attractives/${attractivesList[i].cover}`;
         attractivesList[i].cover = cover;
     }
 
@@ -36,7 +34,6 @@ export const NewAttractive = async (req: Request, res: Response) => {
         description,
         latitude,
         longitude,
-        location,
         walkingLevel,
         averageWalkingTime,
         distanceOfCarrancas,
@@ -68,10 +65,8 @@ export const NewAttractive = async (req: Request, res: Response) => {
                 name,
                 title,
                 description,
-                price,
                 latitude,
                 longitude,
-                location,
                 vehicleRecomended,
                 polluted,
                 guide,

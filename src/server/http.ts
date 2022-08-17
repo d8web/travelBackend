@@ -23,6 +23,7 @@ app.use("/api/attractives", routes.AttractivesRoutes);
 app.use("/api/agencies", routes.AgenciesRoutes);
 app.use("/api/business", routes.BusinessRoutes);
 app.use("/api/messages", routes.MessagesRoutes);
+app.use("/api/services", routes.ServicesRoutes);
 app.use("/api/tours", routes.ToursRoutes);
 app.use("/api/parks", routes.ParksRoutes);
 app.use("/api/posts", routes.PostsRoutes);

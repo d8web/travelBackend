@@ -15,7 +15,6 @@ export const Create = async (req: Request, res: Response) => {
         meansOfLocomotion,
         guidesOnVehicleClient,
         video,
-        minPeople,
         duration,
         specialPrice,
         descriptionTour,
@@ -32,7 +31,6 @@ export const Create = async (req: Request, res: Response) => {
     
         const pricePerPeople = parseFloat(req.body.pricePerPeople);
         const groups = req.body.groups === "true";
-        const maxPeople = parseInt(req.body.maxPeople);
     
         try {
             const savedTour = await TourService.insertTour({
@@ -78,6 +76,7 @@ export const AllTours = async (req: Request, res: Response) => {
         const attractives = await AttractiveService.getAttractivesFromTour(allTours[i].attractives);
 
         result.push({
+            id: allTours[i].id,
             name: allTours[i].name,
             attractivesIncludes: attractives
         });

@@ -4,12 +4,13 @@ export type FoodType = {
     name: string;
     ownerName: string;
     image?: string;
+    businessPermit?: string;
+    number?: string;
     phone?: string;
     whatsapp?: string;
     hourOpen?: string;
     hourClosed?: string;
     delivery?: boolean;
-    menu?: string[];
     website?: string;
     facebook?: string;
     instagram?: string;
@@ -18,8 +19,6 @@ export type FoodType = {
     acceptOrders?: boolean;
     reference?: string;
     mainCourse?: string;
-    maxOrderAllowed?: number;
-    commissionPercent: number;
     driversRate: number;
     latitude?: string;
     longitude?: string;

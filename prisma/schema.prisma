@@ -283,12 +283,12 @@ model Agency {
 }
 
 model Service {
-    id       String @id @default(uuid())
+    id       String   @id @default(uuid())
     idAgency String // Idenfifier agency
     name     String // Name service of agency
     price    Float // Agency Pricing Service
     tours    String[] // Tours included that service
-    duration String @db.VarChar(50)
+    duration String   @db.VarChar(50)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -391,8 +391,8 @@ model Tour {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    agency      Agency       @relation(fields: [idAgency], references: [id])
-    images      ImagesTour[]
+    agency Agency       @relation(fields: [idAgency], references: [id])
+    images ImagesTour[]
 
     @@map("tours")
 }
@@ -513,12 +513,13 @@ model Food {
     name               String
     ownerName          String // The name of the restaurant’s owner, [Nome do dono]
     image              String?  @default("cover.jpg") // logo from restaurant
+    businessPermit     String? // Alvará da prefeitura
+    number             String   @db.VarChar(15)
     phone              String?  @db.VarChar(50)
     whatsapp           String?  @db.VarChar(50)
     hourOpen           String?  @db.VarChar(10)
     hourClosed         String?  @db.VarChar(10)
     delivery           Boolean? @default(true) // Has delivery
-    menu               String[] @default([])
     website            String?
     facebook           String?
     instagram          String?
@@ -527,8 +528,6 @@ model Food {
     acceptOrders       Boolean? @default(false) // Accept orders [Aceita encomendas]
     reference          String?
     mainCourse         String? // [Prato principal]
-    maxOrderAllowed    Int // O pedido máximo permitido
-    commissionPercent  Int //  ​​A porcentagem de comissão
     driversRate        Float // O valor da taxa do motorista
     latitude           String?  @db.VarChar(100)
     longitude          String?  @db.VarChar(100)

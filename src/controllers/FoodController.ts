@@ -36,8 +36,6 @@ export const Create = async (req: Request, res: Response) => {
     try {
         const savedFood = await FoodService.create({
             acceptReservation,
-            commissionPercent,
-            maxOrderAllowed,
             acceptOrders,
             driversRate,
             acceptPets,
@@ -48,11 +46,12 @@ export const Create = async (req: Request, res: Response) => {
             name: req.body.name,
             ownerName: req.body.ownerName,
             image: req.body.image,
+            businessPermit: req.body.businessPermit,
+            number: req.body.number,
             phone: req.body.phone,
             whatsapp: req.body.whatsapp,
             hourOpen: req.body.hourOpen,
             hourClosed: req.body.hourClosed,
-            menu: req.body.menu,
             website: req.body.website,
             facebook: req.body.facebook,
             instagram: req.body.instagram,

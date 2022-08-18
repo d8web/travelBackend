@@ -53,7 +53,7 @@ CREATE TABLE "refresh_tokens" (
 -- CreateTable
 CREATE TABLE "attractives" (
     "id" TEXT NOT NULL,
-    "idPark" TEXT NOT NULL,
+    "idPark" TEXT,
     "type" TEXT DEFAULT 'Cachoeira',
     "name" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -552,7 +552,7 @@ ALTER TABLE "user_appointments" ADD CONSTRAINT "user_appointments_idUser_fkey" F
 ALTER TABLE "refresh_tokens" ADD CONSTRAINT "refresh_tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "attractives" ADD CONSTRAINT "attractives_idPark_fkey" FOREIGN KEY ("idPark") REFERENCES "parks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "attractives" ADD CONSTRAINT "attractives_idPark_fkey" FOREIGN KEY ("idPark") REFERENCES "parks"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "images_attractives" ADD CONSTRAINT "images_attractives_idAttractive_fkey" FOREIGN KEY ("idAttractive") REFERENCES "attractives"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

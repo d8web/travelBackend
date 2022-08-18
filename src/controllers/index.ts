@@ -2,6 +2,7 @@ import * as AccommodationController from "./AccommodationController";
 import * as ConversationController from "./ConversationController";
 import * as AttractiveController from "./AttractiveController";
 import * as BusinessController from "./BusinessController";
+import * as FoodListController from "./FoodListController";
 import * as MessageController from "./MessageController";
 import * as ServiceController from "./ServiceController";
 import * as AgencyController from "./AgencyController";
@@ -17,11 +18,12 @@ export {
     AccommodationController,
     ConversationController,
     AttractiveController,
-    AuthController,
     BusinessController,
+    FoodListController,
     MessageController,
     ServiceController,
     AgencyController,
+    AuthController,
     UserController,
     FeedController,
     ParkController,

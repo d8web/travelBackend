@@ -38,3 +38,7 @@ export const create = async (data: FoodType, imageName: string) => {
 export const getAll = async () => {
     return await client.food.findMany();
 }
+
+export const getOne = async (id: string) => {
+    return await client.food.findFirst({ where: { id } });
+}

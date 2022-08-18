@@ -80,7 +80,7 @@ model RefreshToken {
 
 model Attractives {
     id                  String   @id @default(uuid())
-    idPark              String
+    idPark              String?
     type                String?  @default("Cachoeira")
     name                String
     title               String

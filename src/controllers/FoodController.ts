@@ -29,8 +29,6 @@ export const Create = async (req: Request, res: Response) => {
     const delivery = convertStringToBoolean(req.body.delivery);
     const bestFood = convertStringToBoolean(req.body.bestFood);
 
-    const commissionPercent = convertStringToNumber(req.body.commissionPercent);
-    const maxOrderAllowed = convertStringToNumber(req.body.maxOrderAllowed);
     const driversRate = convertStringToNumber(req.body.driversRate);
 
     try {

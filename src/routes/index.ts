@@ -6,6 +6,7 @@ import BusinessRoutes from "./Business";
 import AgenciesRoutes from "./Agencies";
 import MessagesRoutes from "./Messages";
 import ServicesRoutes from "./Services";
+import FoodListRoutes from "./FoodList";
 import ParksRoutes from "./Parks";
 import PostsRoutes from "./Posts";
 import UserRoutes from "./Users";
@@ -19,6 +20,7 @@ export default {
     ConversationsRoutes,
     AppointmentsRoutes,
     AttractivesRoutes,
+    FoodListRoutes,
     BusinessRoutes,
     AgenciesRoutes,
     MessagesRoutes,

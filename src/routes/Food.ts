@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { FoodController } from "../controllers/index";
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
+import { FoodController } from "../controllers/index";
+import { Router } from "express";
 import upload from "../helpers/multer";
 
 const routes = Router();

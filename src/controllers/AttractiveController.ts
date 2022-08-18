@@ -1,12 +1,9 @@
-import { ImagesAttractiveService } from "../services/index";
+import { AttractiveService, ParkService, ImagesAttractiveService } from "../services";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { createFolder } from "../helpers/createFolder";
 import { slugify } from "../helpers/manipulateFolderName";
 import { unlink } from "fs/promises";
-
-import * as AttractiveService from "../services/attractiveService";
-import * as ParkService from "../services/parkService";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -54,8 +51,6 @@ export const NewAttractive = async (req: Request, res: Response) => {
         const slipperyStones = req.body.slipperyStones === "true";
         const placeForChildren = req.body.placeForChildren === "true";
         const bestPhotos = req.body.bestPhotos === "true";
-
-        const price = parseInt(req.body.price);
 
         try {
             const fileName = await resizeAndReturnImage(req.file, "attractives");

@@ -508,7 +508,7 @@ model ImageBusiness {
 // Reference DB https://www.inettutor.com/diagrams/restaurant-food-delivery-system-free-database-design-tutorial/
 model Food {
     id                 String   @id @default(uuid())
-    type               String   @db.VarChar(50) // Restaurand, bakery, pizza or burger
+    type               String   @db.VarChar(50) // Restaurant, bakery, pizza or burger
     typeFood           String[] @default(["all"]) // Vegan, all, mineira, vegetarian
     name               String
     ownerName          String // The name of the restaurant’s owner, [Nome do dono]

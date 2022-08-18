@@ -1,14 +1,14 @@
-import { client } from "../prisma/client";
 import { FoodType } from "../types/FoodType";
+import { client } from "../prisma/client";
 
-export const create = async (data: FoodType) => {
+export const create = async (data: FoodType, imageName: string) => {
     return await client.food.create({
         data: {
             type: data.type,
             typeFood: data.typeFood,
             name: data.name,
             ownerName: data.ownerName,
-            image: data.image,
+            image: imageName !== "" ? imageName : "cover.jpg",
             phone: data.phone,
             whatsapp: data.whatsapp,
             hourOpen: data.hourOpen,

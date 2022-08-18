@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { FoodController } from "../controllers/index";
 import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
+import upload from "../helpers/multer";
 
 const routes = Router();
 
@@ -22,6 +23,7 @@ routes.get(
 routes.post(
     "/",
     ensureAuthenticated,
+    upload.single("image"),
     FoodController.Create
 );
 

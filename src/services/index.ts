@@ -17,6 +17,7 @@ import * as ParkService from "./parkService";
 import * as PostService from "./postService";
 import * as TourService from "./tourService";
 import * as UserService from "./userService";
+import * as FoodService from "./foodService";
 
 export {
     ImagesAttractiveService,
@@ -38,4 +39,5 @@ export {
     PostService,
     TourService,
     UserService,
+    FoodService
 }

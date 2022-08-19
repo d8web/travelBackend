@@ -101,8 +101,8 @@ model Attractives {
     averageDepth        String   @db.VarChar(100)
     averageHeightOfFall String   @db.VarChar(100)
     bestPhotos          Boolean? @default(true)
-    // openVisits          Boolean? @default(true) // Aberto p/visitação
-    // historicalHeritage  Boolean? @default(false) // Patrimônio histórico
+    openVisits          Boolean? @default(true) // Aberto p/visitação
+    historicalHeritage  Boolean? @default(false) // Patrimônio histórico
     observations        String?  @db.Text
 
     createdAt DateTime @default(now())
@@ -234,6 +234,7 @@ model Park {
     longitude         String   @db.VarChar(50)
     facebook          String?
     instagram         String?
+    status            Boolean? @default(true)
     othersSocialMedia String[] @default([])
 
     createdAt DateTime @default(now())

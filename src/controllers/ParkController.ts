@@ -2,6 +2,7 @@ import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { ParkService } from "../services/index";
 import dotenv from "dotenv";
+import { convertStringToBoolean } from "../helpers/convertStringToBoolean";
 dotenv.config();
 
 // Get all parks
@@ -31,31 +32,31 @@ export const Create = async (req: Request, res: Response) => {
         othersSocialMedia,
     } = req.body;
 
+    const privateLocation = convertStringToBoolean(req.body.private);
+    const restaurant = convertStringToBoolean(req.body.restaurant);
+    const parking = convertStringToBoolean(req.body.parking);
+    const hotel = convertStringToBoolean(req.body.hotel);
     const price = parseFloat(req.body.price);
-    const wifi = req.body.wifi === "true";
-    const bath = req.body.bath === "true";
-    const restaurant = req.body.restaurant === "true";
-    const parking = req.body.parking === "true";
-    const privateLocation = req.body.private === "true";
-    const hotel = req.body.hotel === "true";
+    const wifi = convertStringToBoolean(req.body.wifi);
+    const bath = convertStringToBoolean(req.body.bath);
 
     const savedPark = await ParkService.insertPark({
-        name,
+        private: privateLocation,
+        othersSocialMedia,
+        mainWaterfall,
+        restaurant,
+        longitude,
+        instagram,
+        latitude,
+        whatsapp,
+        facebook,
+        parking,
         price,
         phone,
-        whatsapp,
+        hotel,
+        name,
         wifi,
         bath,
-        restaurant,
-        parking,
-        private: privateLocation,
-        hotel,
-        mainWaterfall,
-        latitude,
-        longitude,
-        facebook,
-        instagram,
-        othersSocialMedia,
     }, imageName);
     
     res.status(201).json(savedPark);

@@ -49,6 +49,8 @@ export const createAttractive = async (attractive: Attractive, image: string) =>
             averageDepth: attractive.averageDepth,
             averageHeightOfFall: attractive.averageHeightOfFall,
             bestPhotos: attractive.bestPhotos,
+            openVisits: attractive.openVisits,
+            historicalHeritage: attractive.historicalHeritage,
             observations: attractive.observations
         }
     });

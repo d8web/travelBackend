@@ -14,5 +14,6 @@ export interface ParkType {
     longitude: string;
     facebook: string;
     instagram: string;
+    status?: boolean;
     othersSocialMedia: string[]
 }

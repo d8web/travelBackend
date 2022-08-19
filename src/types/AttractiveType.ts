@@ -22,5 +22,7 @@ export interface Attractive {
     averageDepth?: string;
     averageHeightOfFall?: string;
     bestPhotos?: boolean;
+    openVisits?: boolean;
+    historicalHeritage?: boolean;
     observations?: string;
 }

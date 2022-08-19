@@ -33,6 +33,7 @@ export const insertPark = async (parkObject: ParkType, image: string) => {
             latitude: parkObject.latitude,
             longitude: parkObject.longitude,
             facebook: parkObject.facebook,
+            status: parkObject.status,
             instagram: parkObject.instagram,
             othersSocialMedia: parkObject.othersSocialMedia
         }

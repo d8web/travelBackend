@@ -25,19 +25,19 @@ export const All = async (req: Request, res: Response) => {
 export const NewAttractive = async (req: Request, res: Response) => {
 
     const {
-        idPark,
-        type,
-        name,
-        title,
-        description,
-        latitude,
-        longitude,
-        walkingLevel,
-        averageWalkingTime,
         distanceOfCarrancas,
-        averageDepth,
         averageHeightOfFall,
-        observations
+        averageWalkingTime,
+        walkingLevel,
+        averageDepth,
+        observations,
+        description,
+        longitude,
+        latitude,
+        idPark,
+        title,
+        type,
+        name
     } = req.body;
 
     // Verify if send idPark
@@ -52,14 +52,16 @@ export const NewAttractive = async (req: Request, res: Response) => {
         }
     }
 
+    const historicalHeritage = convertStringToBoolean(req.body.historicalHeritage);
     const vehicleRecomended = convertStringToBoolean(req.body.vehicleRecomended);
-    const guide = convertStringToBoolean(req.body.guide);
-    const polluted = convertStringToBoolean(req.body.polluted);
-    const propertyPrivate = convertStringToBoolean(req.body.propertyPrivate);
-    const popularLocation = convertStringToBoolean(req.body.popularLocation);
-    const slipperyStones = convertStringToBoolean(req.body.slipperyStones);
     const placeForChildren = convertStringToBoolean(req.body.placeForChildren);
+    const popularLocation = convertStringToBoolean(req.body.popularLocation);
+    const propertyPrivate = convertStringToBoolean(req.body.propertyPrivate);
+    const slipperyStones = convertStringToBoolean(req.body.slipperyStones);
     const bestPhotos = convertStringToBoolean(req.body.bestPhotos);
+    const openVisits = convertStringToBoolean(req.body.openVisits);
+    const polluted = convertStringToBoolean(req.body.polluted);
+    const guide = convertStringToBoolean(req.body.guide);
     
     try {
         let fileName = "";
@@ -67,27 +69,29 @@ export const NewAttractive = async (req: Request, res: Response) => {
             fileName = await resizeAndReturnImage(req.file, "attractives");
         }
         const attractiveSaved = await AttractiveService.createAttractive({
+            averageHeightOfFall,
+            historicalHeritage,
+            distanceOfCarrancas,
+            averageWalkingTime,
             vehicleRecomended,
-            guide,
-            polluted,
+            placeForChildren,
             propertyPrivate,
             popularLocation,
             slipperyStones,
-            placeForChildren,
-            bestPhotos,
-            idPark,
-            type,
-            name,
-            title,
-            description,
-            latitude,
-            longitude,
             walkingLevel,
-            averageWalkingTime,
-            distanceOfCarrancas,
             averageDepth,
-            averageHeightOfFall,
-            observations
+            observations,
+            description,
+            bestPhotos,
+            openVisits,
+            longitude,
+            polluted,
+            latitude,
+            idPark,
+            guide,
+            title,
+            type,
+            name
         }, fileName);
         res.status(201).json(attractiveSaved);
 

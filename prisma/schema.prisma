@@ -101,6 +101,8 @@ model Attractives {
     averageDepth        String   @db.VarChar(100)
     averageHeightOfFall String   @db.VarChar(100)
     bestPhotos          Boolean? @default(true)
+    // openVisits          Boolean? @default(true) // Aberto p/visitação
+    // historicalHeritage  Boolean? @default(false) // Patrimônio histórico
     observations        String?  @db.Text
 
     createdAt DateTime @default(now())
@@ -533,6 +535,7 @@ model Food {
     longitude          String?  @db.VarChar(100)
     acceptPets         Boolean? @default(false)
     bestFood           Boolean? @default(false)
+    // liveMusic          Boolean? @default(false) // Música ao vivo
     registrationStatus String?  @default("pendente") @db.VarChar(100) // pending, approved, disapproved
     observations       String?  @db.Text
 

@@ -1,4 +1,5 @@
 import { AttractiveService, ParkService, ImagesAttractiveService } from "../services";
+import { convertStringToBoolean } from "../helpers/convertStringToBoolean";
 import { resizeAndReturnImage } from "../helpers/imageManipulate";
 import { Request, Response } from "express";
 import { createFolder } from "../helpers/createFolder";
@@ -17,7 +18,7 @@ export const All = async (req: Request, res: Response) => {
         attractivesList[i].cover = cover;
     }
 
-    return res.status(200).json(attractivesList);
+    res.status(200).json({ total: attractivesList.length, attractivesList});
 }
 
 // Add new attractive
@@ -38,62 +39,66 @@ export const NewAttractive = async (req: Request, res: Response) => {
         averageHeightOfFall,
         observations
     } = req.body;
-    const park = await ParkService.getOneParkById(idPark);
 
-    // Verify if park exists before create attractive
-    if (park) {
-
-        const vehicleRecomended = req.body.vehicleRecomended === "true";
-        const guide = req.body.guide === "true";
-        const polluted = req.body.polluted === "true";
-        const propertyPrivate = req.body.propertyPrivate === "true";
-        const popularLocation = req.body.popularLocation === "true";
-        const slipperyStones = req.body.slipperyStones === "true";
-        const placeForChildren = req.body.placeForChildren === "true";
-        const bestPhotos = req.body.bestPhotos === "true";
-
-        try {
-            const fileName = await resizeAndReturnImage(req.file, "attractives");
-            const attractiveSaved = await AttractiveService.createAttractive({
-                idPark,
-                type,
-                name,
-                title,
-                description,
-                latitude,
-                longitude,
-                vehicleRecomended,
-                polluted,
-                guide,
-                propertyPrivate,
-                popularLocation,
-                walkingLevel,
-                averageWalkingTime,
-                slipperyStones,
-                distanceOfCarrancas,
-                placeForChildren,
-                averageDepth,
-                averageHeightOfFall,
-                bestPhotos,
-                observations
-            }, fileName);
-            res.status(201).json(attractiveSaved);
-
-        } catch (err) {
+    // Verify if send idPark
+    if(idPark) {
+        const parkExists = await ParkService.getOneParkById(idPark);
+        // Verify if park exists before create attractive
+        if (!parkExists) {
             res.status(400).json({
                 error: true,
-                message: "An error has occurred",
-                realError: err
+                message: "Park does not exists!"
             });
         }
+    }
 
-    } else {
-        await unlink(req.file.path);
+    const vehicleRecomended = convertStringToBoolean(req.body.vehicleRecomended);
+    const guide = convertStringToBoolean(req.body.guide);
+    const polluted = convertStringToBoolean(req.body.polluted);
+    const propertyPrivate = convertStringToBoolean(req.body.propertyPrivate);
+    const popularLocation = convertStringToBoolean(req.body.popularLocation);
+    const slipperyStones = convertStringToBoolean(req.body.slipperyStones);
+    const placeForChildren = convertStringToBoolean(req.body.placeForChildren);
+    const bestPhotos = convertStringToBoolean(req.body.bestPhotos);
+    
+    try {
+        let fileName = "";
+        if(req.file) {
+            fileName = await resizeAndReturnImage(req.file, "attractives");
+        }
+        const attractiveSaved = await AttractiveService.createAttractive({
+            vehicleRecomended,
+            guide,
+            polluted,
+            propertyPrivate,
+            popularLocation,
+            slipperyStones,
+            placeForChildren,
+            bestPhotos,
+            idPark,
+            type,
+            name,
+            title,
+            description,
+            latitude,
+            longitude,
+            walkingLevel,
+            averageWalkingTime,
+            distanceOfCarrancas,
+            averageDepth,
+            averageHeightOfFall,
+            observations
+        }, fileName);
+        res.status(201).json(attractiveSaved);
+
+    } catch (err) {
         res.status(400).json({
             error: true,
-            message: "Park does not exists!"
+            message: "An error has occurred",
+            realError: err
         });
     }
+
 }
 
 // Add new images

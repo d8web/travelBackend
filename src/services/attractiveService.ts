@@ -11,7 +11,16 @@ export const getAllAttractives = async () => {
             type: true,
             title: true,
             name: true,
-            cover: true
+            cover: true,
+            parks: {
+                select: {
+                    name: true,
+                    price: true
+                }
+            }
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     });
 }
@@ -23,7 +32,7 @@ export const createAttractive = async (attractive: Attractive, image: string) =>
             type: attractive.type,
             name: attractive.name,
             title: attractive.title,
-            cover: image,
+            cover: image !== "" ? image : "cover.jpg",
             description: attractive.description,
             latitude: attractive.latitude,
             longitude: attractive.longitude,

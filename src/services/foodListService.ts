@@ -1,5 +1,5 @@
-import { client } from "../prisma/client";
 import { FoodListType } from "../types/FoodListType";
+import { client } from "../prisma/client";
 
 export const create = async (data: FoodListType) => {
     return await client.foodList.create({
@@ -13,6 +13,10 @@ export const create = async (data: FoodListType) => {
             status: data.status
         }
     });
+}
+
+export const getListByAgencyId = async ( foodId: string ) => {
+    return await client.foodList.findMany({ where: { foodId } });
 }
 
 export const all = async () => {

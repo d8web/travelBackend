@@ -3,7 +3,7 @@ import * as ImageAccomodationType from "./ImageAccomodationType";
 import * as AttractiveReviewType from "./AttractiveReviewType";
 import * as DeliveryDriverType from "./DeliveryDriverType";
 import * as ServiceReviewType from "./ServiceReviewType";
-import * as AccomodationType from "./AccommodationType";
+import * as AccommodationType from "./AccommodationType";
 import * as ConversationType from "./ConversationType";
 import * as UserFavoriteType from "./UserFavoriteType";
 import * as FoodFeedbackType from "./FoodFeedbackType";
@@ -36,7 +36,7 @@ export {
     AttractiveReviewType,
     DeliveryDriverType,
     ServiceReviewType,
-    AccomodationType,
+    AccommodationType,
     ConversationType,
     UserFavoriteType,
     FoodFeedbackType,

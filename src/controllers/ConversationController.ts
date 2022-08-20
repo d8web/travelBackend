@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { CustomRequest } from "../middlewares/ensureAuthenticated";
 
 export const Create = async (req: Request, res: Response) => {
-
     const { receiverId } = req.body;
     if(receiverId) {
 
@@ -31,7 +30,6 @@ export const Create = async (req: Request, res: Response) => {
             message: "ReceivedId not found or not sending!"
         });
     }
-
 }
 
 // Get the list conversation from user logged
@@ -60,7 +58,6 @@ export const FindConversation = async (req: Request, res: Response) => {
 
 // Get the unique conversation
 export const FindByTwoUsers = async (req: Request, res: Response) => {
-
     const { id } = req.params;
     const userLogged = (req as CustomRequest).user as string;
 
@@ -93,5 +90,4 @@ export const FindByTwoUsers = async (req: Request, res: Response) => {
             message: "Id not sending or not found!"
         });
     }
-
 }

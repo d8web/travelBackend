@@ -3,8 +3,8 @@ import { Attractive } from "../types/AttractiveType";
 
 const prisma = new PrismaClient();
 
-export const getAllAttractives = async () => {
-    return prisma.attractives.findMany({
+export const getAllAttractives = async (idUser: string) => {
+    return prisma.attractive.findMany({
         select: {
             id: true,
             idPark: true,
@@ -12,6 +12,14 @@ export const getAllAttractives = async () => {
             title: true,
             name: true,
             cover: true,
+            UserFavorite: {
+                select: {
+                    id: true
+                },
+                where: {
+                    idUser
+                }
+            },
             parks: {
                 select: {
                     name: true,
@@ -26,7 +34,7 @@ export const getAllAttractives = async () => {
 }
 
 export const createAttractive = async (attractive: Attractive, image: string) => {
-    return await prisma.attractives.create({
+    return await prisma.attractive.create({
         data: {
             idPark: attractive.idPark,
             type: attractive.type,
@@ -57,7 +65,7 @@ export const createAttractive = async (attractive: Attractive, image: string) =>
 }
 
 export const getOneAttractive = async (idAttractive: string) => {
-    return await prisma.attractives.findUnique({
+    return await prisma.attractive.findUnique({
         select: {
             id: true,
             name: true,
@@ -77,7 +85,7 @@ export const getOneAttractive = async (idAttractive: string) => {
 }
 
 export const getAttractivesFromTour = async (ids: string[]) => {
-    return await prisma.attractives.findMany({
+    return await prisma.attractive.findMany({
         select: {
             id: true,
             name: true,

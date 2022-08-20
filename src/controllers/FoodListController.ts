@@ -6,7 +6,6 @@ import { Request, Response } from "express";
 import { unlink } from "fs/promises";
 
 export const Create = async (req: Request, res: Response) => {
-
     let imageName = "";
     if(req.file) {
         imageName = await resizeAndReturnImage(req.file, "foodlist");

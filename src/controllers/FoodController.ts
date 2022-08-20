@@ -17,7 +17,6 @@ export const All = async (req: Request, res: Response) => {
 }
 
 export const Create = async (req: Request, res: Response) => {
-
     let fileName = "";
     if(req.file) {
         fileName = await resizeAndReturnImage(req.file, "foods");

@@ -78,7 +78,7 @@ model RefreshToken {
     @@map("refresh_tokens")
 }
 
-model Attractives {
+model Attractive {
     id                  String   @id @default(uuid())
     idPark              String?
     type                String?  @default("Cachoeira")
@@ -111,6 +111,7 @@ model Attractives {
     images            ImagesAttractive[]
     attractiveReviews AttractiveReview[]
     parks             Park?              @relation(fields: [idPark], references: [id])
+    UserFavorite      UserFavorite[]
 
     @@map("attractives")
 }
@@ -123,7 +124,7 @@ model ImagesAttractive {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    attractive Attractives @relation(fields: [idAttractive], references: [id])
+    attractive Attractive @relation(fields: [idAttractive], references: [id])
 
     @@map("images_attractives")
 }
@@ -195,7 +196,8 @@ model UserFavorite {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    user User @relation(fields: [idUser], references: [id])
+    user       User       @relation(fields: [idUser], references: [id])
+    attractive Attractive @relation(fields: [idAttractive], references: [id])
 
     @@map("user_favorites")
 }
@@ -210,8 +212,8 @@ model AttractiveReview {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    user       User        @relation(fields: [idUser], references: [id])
-    attractive Attractives @relation(fields: [idAttractive], references: [id])
+    user       User       @relation(fields: [idUser], references: [id])
+    attractive Attractive @relation(fields: [idAttractive], references: [id])
 
     @@map("attractive_reviews")
 }
@@ -240,7 +242,7 @@ model Park {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    attractiveList Attractives[]
+    attractiveList Attractive[]
     images         ImagePark[]
 
     @@map("parks")

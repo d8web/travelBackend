@@ -83,7 +83,6 @@ export const All = async (req: Request, res: Response) => {
 }
 
 export const One = async (req: Request, res: Response) => {
-
     const { id } = req.params;
     if(id) {
 
@@ -103,5 +102,4 @@ export const One = async (req: Request, res: Response) => {
             message: "Id not sending!"
         });
     }
-
 }

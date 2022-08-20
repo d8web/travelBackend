@@ -4,7 +4,6 @@ import { getOneUserById } from "../services/userService";
 import { insertMessage } from "../services/messageService";
 
 export const createMessage = async (req: Request, res: Response) => {
-
     const { conversationId, sender, text } = req.body;
     const senderIdExists = await getOneUserById(sender);
     const conversationExists = await ConversationService.conversationExistsById(conversationId);
@@ -28,5 +27,4 @@ export const createMessage = async (req: Request, res: Response) => {
             message: "Ocorreu um erro!"
         });
     }
-
 }

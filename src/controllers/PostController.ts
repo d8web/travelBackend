@@ -8,7 +8,6 @@ import { CustomRequest } from "../middlewares/ensureAuthenticated";
 
 // Like a post function
 export const Like = async (req: Request, res: Response) => {
-
     // Verify is post exists
     const post = await PostService.getOnePostById(req.params.id);
     if(post) {
@@ -38,12 +37,10 @@ export const Like = async (req: Request, res: Response) => {
             message: "Post not found or not sending id!"
         });
     }
-
 }
 
 // Comment a post
 export const Comment = async (req: Request, res: Response) => {
-    
     // Verify is post exists
     const post = await PostService.getOnePostById(req.params.id);
     if(post) {
@@ -68,5 +65,4 @@ export const Comment = async (req: Request, res: Response) => {
             message: "Post not found or not sending id!"
         });
     }
-
 }

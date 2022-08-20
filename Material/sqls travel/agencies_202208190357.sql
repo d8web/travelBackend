@@ -1,4 +1,0 @@
-INSERT INTO public.agencies (id,"name",address,"type",image,website,phone,whatsapp,facebook,instagram,"othersSocialMedia","createdAt","updatedAt") VALUES
-	 ('73829f37-3738-4026-a799-62d19965561b','Agencia V','Rua x,t,z Nº 200','agency','c8146a23dfc401b303b373a258f4ebb6.jpg',NULL,NULL,'(35) 91111-5555',NULL,NULL,'{}','2022-08-17 07:20:15.96','2022-08-17 07:20:15.961'),
-	 ('c42b88a9-18ce-4ed5-a350-dd86bd8d930b','Agencia X','Rua t,v,k Nº 500','agency','75023e79eeb0077b48b989276658f6a6.jpg',NULL,NULL,'(35) 91111-5555',NULL,NULL,'{}','2022-08-17 07:24:37.261','2022-08-17 07:24:37.261'),
-	 ('07a2e416-a19b-4476-9bc8-f4d0ecbc28e8','Agencia Jk','Rua t,v,k Nº 379','agency','ef79c747775783f3e1c3078411f491a2.jpg',NULL,NULL,'(35) 91111-5555',NULL,NULL,'{}','2022-08-17 07:26:32.388','2022-08-17 07:26:32.388');

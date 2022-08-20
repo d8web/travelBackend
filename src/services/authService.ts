@@ -56,5 +56,5 @@ export const authenticate = async ({ email, password }: AuthRequest) => {
     
     const refreshToken = await GenerateRefreshToken(userAlreadyExists.id);
 
-    return { token, refreshToken };
+    return { token, refreshToken, user: userAlreadyExists };
 }

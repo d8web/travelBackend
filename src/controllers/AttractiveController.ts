@@ -7,18 +7,19 @@ import { slugify } from "../helpers/manipulateFolderName";
 import { unlink } from "fs/promises";
 
 import dotenv from "dotenv";
+import { CustomRequest } from "../middlewares/ensureAuthenticated";
 dotenv.config();
 
 // List of all attractives
 export const All = async (req: Request, res: Response) => {
-    const attractivesList = await AttractiveService.getAllAttractives();
+    const attractivesList = await AttractiveService.getAllAttractives((req as CustomRequest).user as string);
 
     for (let i in attractivesList) {
         let cover = `${process.env.BASE_URL}/media/images/attractives/${attractivesList[i].cover}`;
         attractivesList[i].cover = cover;
     }
 
-    res.status(200).json({ total: attractivesList.length, attractivesList});
+    res.status(200).json(attractivesList);
 }
 
 // Add new attractive

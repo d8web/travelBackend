@@ -43,12 +43,10 @@ export const Follow = async (req: Request, res: Response) => {
             message: "User does not exists!"
         });
     }
-
 }
 
 // Get a followers from user
 export const Followers = async (req: Request, res: Response) => {
-
     const id = req.params.id;
     const userExists = await UserService.getOneUserById(id);
 
@@ -101,12 +99,10 @@ export const Followers = async (req: Request, res: Response) => {
             message: "User does not exists!"
         });
     }
-
 }
 
 // Toogle user favorite
 export const ToogleFavorite = async (req: Request, res: Response) => {
-
     const { idAttractive } = req.body;
 
     if(idAttractive) {
@@ -137,7 +133,6 @@ export const ToogleFavorite = async (req: Request, res: Response) => {
             message: "Id attractive not found or not send!"
         });
     }
-
 }
 
 // Get the list of user favorites

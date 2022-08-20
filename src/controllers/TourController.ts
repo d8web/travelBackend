@@ -6,7 +6,6 @@ import { unlink } from "fs/promises";
 
 // Create a new tour
 export const Create = async (req: Request, res: Response) => {
-
     const imageName: string = await resizeAndReturnImage(req.file, "tours");
 
     const {
